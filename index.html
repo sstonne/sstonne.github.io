@@ -124,7 +124,8 @@
   .links { display: flex; flex-wrap: wrap; gap: 0.35rem 1.1rem; margin-top: 1.25rem; font-size: var(--s-sm); }
   .links a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: 1px; }
   .links a:hover { border-color: var(--learn); color: var(--learn); }
-  .email { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); margin-top: 0.6rem; user-select: all; }
+  .email { font-size: var(--s-sm); color: var(--muted); margin: 0.75rem 0 0; }
+  .email .addr { color: var(--ink); user-select: all; }
 
   .kw { margin-top: 1.75rem; }
   .label {
@@ -203,7 +204,7 @@
     <nav aria-label="Sections">
       <a href="#research">Research</a>
       <a class="hide-sm" href="#news">News</a>
-      <a class="hide-sm" href="#talks">Talks</a>
+      <a class="hide-sm" href="#talks">Presentations</a>
       <a class="hide-sm" href="#background">Background</a>
       <a href="SMLee_CV.pdf">CV</a>
       <button class="theme" id="themeBtn" type="button" aria-label="Switch light or dark theme">light/dark</button>
@@ -230,9 +231,8 @@
         <a href="https://orcid.org/0009-0005-9994-8444" target="_blank" rel="noopener">ORCID</a>
         <a href="https://github.com/sstonne" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/sumin-lee-335a98413/" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="mailto:sstone@sookmyung.ac.kr">Email</a>
       </div>
-      <div class="email">sstone@sookmyung.ac.kr</div>
+      <p class="email">Email: <span class="addr">sstone@sookmyung.ac.kr</span></p>
 
       <div class="kw">
         <p class="label">Research keywords</p>
