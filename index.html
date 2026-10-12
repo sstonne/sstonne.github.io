@@ -15,7 +15,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
 <style>
   /* Layout: fixed identity sidebar on the left, scrolling research column on the right.
-     Dark-first, like the paper's Figure 1: green marks steps written as code, violet marks learned policies. */
+     Dark-first. Orange is the page accent; green and violet are reserved for code vs. learned policy. */
   :root {
     --bg: #0d1015;
     --surface: #141920;
@@ -25,6 +25,7 @@
     --rule: #252c36;
     --code: #7fd796;
     --policy: #ad9fff;
+    --accent: #ff8a3d;
     --fig: #ffffff;
 
     --f-display: "Archivo", "IBM Plex Sans", system-ui, sans-serif;
@@ -42,6 +43,7 @@
       --rule: #d2d8df;
       --code: #1d8549;
       --policy: #5a46d4;
+      --accent: #c2500f;
       color-scheme: light;
     }
   }
@@ -54,6 +56,7 @@
     --rule: #d2d8df;
     --code: #1d8549;
     --policy: #5a46d4;
+    --accent: #c2500f;
     color-scheme: light;
   }
 
@@ -66,7 +69,7 @@
   }
   img { max-width: 100%; display: block; }
   a { color: inherit; }
-  :focus-visible { outline: 2px solid var(--policy); outline-offset: 3px; border-radius: 3px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
   .mono { font-family: var(--f-mono); }
 
   .shell {
@@ -102,7 +105,7 @@
   .toc a { text-decoration: none; color: var(--muted); padding: 0.2rem 0; display: flex; gap: 0.6rem; align-items: baseline; }
   .toc a::before { content: ""; width: 0.9rem; height: 1px; background: var(--rule); transform: translateY(-0.25em); transition: width .2s, background .2s; }
   .toc a:hover, .toc a.on { color: var(--ink); }
-  .toc a:hover::before, .toc a.on::before { width: 1.6rem; background: var(--code); }
+  .toc a:hover::before, .toc a.on::before { width: 1.6rem; background: var(--accent); }
   @media (max-width: 980px) { .toc { display: none; } }
 
   .out { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
@@ -110,16 +113,14 @@
     display: inline-block; text-decoration: none; font-size: 0.82rem; font-weight: 500;
     padding: 0.28rem 0.7rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--surface);
   }
-  .out a:hover { border-color: var(--code); color: var(--code); }
-  .out a.cv:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .out a:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
   .mail { margin: -0.6rem 0 0; font-size: 0.85rem; color: var(--muted); }
   .mail span { color: var(--ink); user-select: all; font-family: var(--f-mono); font-size: 0.8rem; }
 
   .label { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.55rem; }
   .kw ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
   .kw li { font-size: 0.86rem; padding-left: 0.85rem; position: relative; }
-  .kw li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 0.35rem; height: 0.35rem; border-radius: 1px; background: var(--code); }
-  .kw li:nth-child(even)::before { background: var(--policy); }
+  .kw li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 0.35rem; height: 0.35rem; border-radius: 1px; background: var(--accent); }
 
   .theme {
     margin-top: auto; align-self: flex-start;
@@ -151,15 +152,14 @@
   .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin-top: 2rem; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
   @media (max-width: 760px) { .three { grid-template-columns: minmax(0, 1fr); } }
   .three > div { background: var(--surface); padding: 1.15rem 1.2rem 1.1rem; display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
-  .three .k { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--code); }
-  .three > div:nth-child(2) .k { color: var(--policy); }
+  .three .k { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
   .three p { margin: 0; font-size: 0.92rem; color: var(--muted); }
   .three a { margin-top: auto; font-size: 0.85rem; font-weight: 600; text-decoration: none; }
-  .three a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .three a:hover { color: var(--accent); }
   .meta { margin: 1.25rem 0 0; font-size: 0.92rem; color: var(--muted); max-width: 60ch; }
   .meta b { color: var(--ink); font-weight: 600; }
   .meta.off { margin-top: 0.35rem; }
-  .meta.off span { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 0.6rem; color: var(--policy); }
+  .meta.off span { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 0.6rem; color: var(--accent); }
 
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
@@ -176,8 +176,7 @@
   .wide .body { max-width: 48rem; }
   .tag { display: inline-flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 0.7rem; }
   .tag span { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.04em; padding: 0.15rem 0.5rem; border-radius: 3px; border: 1px solid var(--rule); color: var(--muted); }
-  .tag span.hot { color: var(--policy); border-color: color-mix(in srgb, var(--policy) 50%, transparent); }
-  .tag span.ok { color: var(--code); border-color: color-mix(in srgb, var(--code) 50%, transparent); }
+  .tag span.hot, .tag span.ok { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
   .work h3 { font-family: var(--f-display); font-stretch: 105%; font-weight: 700; font-size: 1.32rem; line-height: 1.22; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
   .authors { margin: 0.45rem 0 0; font-size: 0.88rem; color: var(--muted); }
   .authors b { color: var(--ink); font-weight: 600; }
@@ -189,7 +188,7 @@
   .stat span { font-family: var(--f-mono); font-size: 0.72rem; color: var(--muted); }
   .links { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.1rem; font-family: var(--f-mono); font-size: 0.75rem; }
   .links a, .links span { padding: 0.25rem 0.65rem; border-radius: 4px; border: 1px solid var(--rule); text-decoration: none; }
-  .links a:hover { border-color: var(--code); color: var(--code); }
+  .links a:hover { border-color: var(--accent); color: var(--accent); }
   .links span { color: var(--muted); border-style: dashed; }
   .marks { margin: 2rem 0 0; font-size: 0.8rem; color: var(--muted); }
 
