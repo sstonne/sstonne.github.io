@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sumin Lee</title>
 <meta name="description" content="Sumin Lee is an M.S. student at Sookmyung Women's University working on LLM-based robot programming, hybrid code–policy learning, and real-to-sim verification for robot manipulation.">
+<meta property="og:title" content="Sumin Lee">
+<meta property="og:description" content="M.S. student at Sookmyung Women's University. LLM-based robot programming, hybrid code–policy learning, and multi-camera calibration for robot manipulation.">
+<meta property="og:image" content="https://sstonne.github.io/assets/profile.jpg">
+<meta property="og:url" content="https://sstonne.github.io/">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
@@ -94,7 +99,15 @@
   @media (max-width: 560px) { .bar nav a.hide-sm { display: none; } }
 
   /* intro */
-  .intro { padding-block: clamp(2.5rem, 7vw, 5rem) 3rem; }
+  .intro { padding-block: clamp(2.5rem, 7vw, 5rem) 3rem; display: grid; grid-template-columns: minmax(0, 1fr) 13rem; gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+  .intro > div { min-width: 0; }
+  .photo { margin: 0; order: 2; }
+  .photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 8px; border: 1px solid var(--rule); }
+  @media (max-width: 760px) {
+    .intro { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+    .photo { order: 0; width: 8rem; }
+  }
+  .aside { color: var(--muted); }
   .intro h1 {
     font-family: var(--f-display); font-size: var(--s-2xl); font-weight: 700;
     line-height: 1.02; letter-spacing: -0.03em; margin: 0;
@@ -171,6 +184,8 @@
   .rows .what b { font-weight: 600; }
   .rows .what div { color: var(--muted); font-size: var(--s-sm); }
   .rows .ko { font-family: "Noto Sans KR", var(--f-body); }
+  .talks { max-width: 56rem; }
+  .rows li { min-width: 0; }
   @media (max-width: 520px) { .rows li { grid-template-columns: minmax(0, 1fr); gap: 0; } }
   h3.sub { font-family: var(--f-display); font-size: var(--s-lg); font-weight: 700; letter-spacing: -0.01em; margin: 0 0 1rem; }
 
@@ -186,6 +201,7 @@
     <nav aria-label="Sections">
       <a href="#research">Research</a>
       <a class="hide-sm" href="#news">News</a>
+      <a class="hide-sm" href="#talks">Talks</a>
       <a class="hide-sm" href="#background">Background</a>
       <a href="SMLee_CV.pdf">CV</a>
       <button class="theme" id="themeBtn" type="button" aria-label="Switch light or dark theme">light/dark</button>
@@ -196,7 +212,6 @@
 <main id="top">
   <div class="wrap intro">
     <div>
-      <!-- 사진을 넣으려면: <img src="assets/profile.jpg" alt="Sumin Lee" style="width:96px;height:96px;border-radius:50%;object-fit:cover;margin-bottom:1.25rem"> -->
       <h1>Sumin Lee<span class="ko" lang="ko">이수민</span></h1>
       <p class="role">M.S. Student, Mechanical Systems Engineering · Autonomous Mechanical Systems Lab, Sookmyung Women's University</p>
 
@@ -204,6 +219,7 @@
         <p>I build robots that turn language into manipulation programs, and I use simulation to check those programs before they run on a real robot.</p>
         <p>My research covers three parts of that problem. <em>Generating</em> the program: LLMs that write and debug low-level code for robot perception and control, with calibration motions checked in simulation first (<a href="#moduloop">ModuLoop</a>). <em>Deciding how to execute it</em>: <span class="c">writing code</span> where geometry is enough and <span class="l">learning policies</span> where contact makes code brittle, with the whole program verified in a simulator aligned to the real scene (<a href="#when-to-code">When to Code, When to Learn</a>). <em>Perceiving the scene precisely</em>: accurate multi-camera calibration, which every precise manipulation task depends on and which also lets the simulator match the real scene (<a href="#cube-in-hand">Cube-in-Hand Calibration</a>).</p>
         <p>I am advised by <em>Prof. Joo Yong Sim</em>.</p>
+        <p class="aside">Outside the lab, I love the slow pace of floating in the sea and snorkeling.</p>
       </div>
 
       <div class="links">
@@ -227,6 +243,7 @@
         </ul>
       </div>
     </div>
+    <figure class="photo"><img src="assets/profile.jpg" width="480" height="600" alt="Portrait of Sumin Lee"></figure>
   </div>
 
   <section class="block" id="news">
@@ -298,6 +315,17 @@
       </div>
 
       <p class="marks">* Equal contribution &nbsp;·&nbsp; † Corresponding author</p>
+    </div>
+  </section>
+
+  <section class="block" id="talks">
+    <div class="wrap">
+      <div class="block-head"><h2>Presentations</h2></div>
+      <ul class="rows talks">
+        <li><span class="date">2026</span><div class="what"><b>ModuLoop: Low-Level Code Generation Using Modular Synthesizer and Closed-Loop Debugger for Robotic Control</b><div>IEEE International Conference on Robotics and Automation (ICRA 2026), RA-L paper presentation · Gina Yoon<sup>*</sup>, <b>Sumin Lee</b><sup>*</sup>, Joo Yong Sim<sup>†</sup></div></div></li>
+        <li><span class="date">2026</span><div class="what"><b>Sim-to-Real Skill Generation for Long-Horizon and Contact-Rich Tasks</b><div>KSME Bioengineering Division Spring Conference, poster · <b>Sumin Lee</b>, Joo Yong Sim<sup>†</sup></div></div></li>
+        <li><span class="date">2025</span><div class="what"><b>LLM-based Robot Arm Pipette Precision Dispensing and Inspection Automation System</b><div class="ko" lang="ko">LLM 기반 데이터 처리 및 실시간 좌표 추출을 통한 로봇 팔 피펫 정밀 분주 및 검토 자동화 시스템</div><div>Korea Robotics Society Annual Conference (KRoC), poster · Gina Yoon, Sumin Lee, <b>Sumin Lee</b>, Seohwi Ha, Joo Yong Sim<sup>†</sup></div></div></li>
+      </ul>
     </div>
   </section>
 
