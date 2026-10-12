@@ -116,6 +116,13 @@
   .out a:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
   .mail { margin: -0.6rem 0 0; font-size: 0.85rem; color: var(--muted); }
   .mail span { color: var(--ink); user-select: all; font-family: var(--f-mono); font-size: 0.8rem; }
+  .copy {
+    font: inherit; font-family: var(--f-mono); font-size: 0.7rem; color: var(--muted);
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 4px;
+    padding: 0.05rem 0.45rem; margin-left: 0.3rem; cursor: pointer; vertical-align: 0.05em;
+  }
+  .copy:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .copy.done { color: var(--accent); border-color: var(--accent); background: var(--surface); }
 
   .label { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.55rem; }
   .kw ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
@@ -239,7 +246,7 @@
       <li><a href="https://github.com/sstonne" target="_blank" rel="noopener">GitHub</a></li>
       <li><a href="https://www.linkedin.com/in/sumin-lee-335a98413/" target="_blank" rel="noopener">LinkedIn</a></li>
     </ul>
-    <p class="mail">Email: <span>sstone@sookmyung.ac.kr</span></p>
+    <p class="mail">Email: <span id="mailAddr">sstone@sookmyung.ac.kr</span> <button class="copy" id="copyMail" type="button" aria-label="Copy email address">copy</button></p>
 
     <div class="kw">
       <p class="label">Research keywords</p>
@@ -414,6 +421,24 @@
       var next = cur === "dark" ? "light" : "dark";
       root.setAttribute("data-theme", next);
       try { localStorage.setItem("theme", next); } catch (e) {}
+    });
+
+    var copyBtn = document.getElementById("copyMail");
+    var addr = document.getElementById("mailAddr");
+    function selectAddr() {
+      var r = document.createRange(); r.selectNodeContents(addr);
+      var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    }
+    function flash(text) {
+      copyBtn.textContent = text; copyBtn.classList.add("done");
+      clearTimeout(copyBtn._t);
+      copyBtn._t = setTimeout(function () { copyBtn.textContent = "copy"; copyBtn.classList.remove("done"); }, 1600);
+    }
+    copyBtn.addEventListener("click", function () {
+      var text = addr.textContent.trim();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { flash("copied"); }, function () { selectAddr(); flash("press Ctrl+C"); });
+      } else { selectAddr(); flash("press Ctrl+C"); }
     });
 
     // highlight the sidebar link for the section in view
