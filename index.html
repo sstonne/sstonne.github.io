@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sumin Lee</title>
+<meta name="description" content="Sumin Lee is an M.S. student at Sookmyung Women's University working on LLM-based robot programming, hybrid code–policy learning, and real-to-sim verification for robot manipulation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Layout: one 72rem column; a text-first intro, then research entries led by their figures. */
+  :root {
+    --paper: #f6f7f5;
+    --ink: #17191c;
+    --muted: #5b6168;
+    --rule: #dcdfda;
+    --code: #2b7547;
+    --learn: #5a50b3;
+    --chip: #eceee9;
+
+    --f-display: "Bricolage Grotesque", "IBM Plex Sans", system-ui, sans-serif;
+    --f-body: "IBM Plex Sans", "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+    --s-xs: 0.8125rem;
+    --s-sm: 0.9rem;
+    --s-md: 1rem;
+    --s-lg: 1.25rem;
+    --s-xl: 1.6rem;
+    --s-2xl: clamp(2.6rem, 6vw, 3.6rem);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #121417;
+      --ink: #e7e9e6;
+      --muted: #9aa1a8;
+      --rule: #2a2e33;
+      --code: #7cc796;
+      --learn: #a59ef2;
+      --chip: #1c1f23;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #121417;
+    --ink: #e7e9e6;
+    --muted: #9aa1a8;
+    --rule: #2a2e33;
+    --code: #7cc796;
+    --learn: #a59ef2;
+    --chip: #1c1f23;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: var(--s-md);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: var(--learn); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { text-decoration-thickness: 2px; }
+  :focus-visible { outline: 2px solid var(--learn); outline-offset: 3px; border-radius: 2px; }
+
+  .wrap { max-width: 72rem; margin: 0 auto; padding-inline: max(16px, 4vw); }
+
+  /* top bar */
+  .bar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.25rem; }
+  .bar .name { font-family: var(--f-display); font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+  .bar nav { display: flex; align-items: center; gap: 1.25rem; font-size: var(--s-sm); }
+  .bar nav a { color: var(--muted); text-decoration: none; }
+  .bar nav a:hover { color: var(--ink); }
+  .theme {
+    font: inherit; font-size: var(--s-xs); font-family: var(--f-mono);
+    color: var(--muted); background: none; border: 1px solid var(--rule);
+    border-radius: 4px; padding: 0.15rem 0.5rem; cursor: pointer;
+  }
+  .theme:hover { color: var(--ink); }
+  @media (max-width: 560px) { .bar nav a.hide-sm { display: none; } }
+
+  /* intro */
+  .intro { padding-block: clamp(2.5rem, 7vw, 5rem) 3rem; }
+  .intro h1 {
+    font-family: var(--f-display); font-size: var(--s-2xl); font-weight: 700;
+    line-height: 1.02; letter-spacing: -0.03em; margin: 0;
+    text-wrap: balance;
+  }
+  .intro h1 .ko { font-family: "Noto Sans KR", var(--f-body); font-size: 0.42em; font-weight: 500; letter-spacing: 0; color: var(--muted); margin-left: 0.4em; vertical-align: 0.35em; }
+  .role { margin: 0.9rem 0 0; color: var(--muted); font-size: var(--s-sm); }
+  .bio { margin: 1.5rem 0 0; max-width: 36rem; font-size: 1.06rem; }
+  .bio p { margin: 0 0 0.9rem; }
+  .bio em { font-style: normal; font-weight: 600; }
+  .bio .c { color: var(--code); font-weight: 600; }
+  .bio .l { color: var(--learn); font-weight: 600; }
+
+  .links { display: flex; flex-wrap: wrap; gap: 0.35rem 1.1rem; margin-top: 1.25rem; font-size: var(--s-sm); }
+  .links a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: 1px; }
+  .links a:hover { border-color: var(--learn); color: var(--learn); }
+  .email { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); margin-top: 0.6rem; user-select: all; }
+
+  .kw { margin-top: 1.75rem; }
+  .label {
+    font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 0.55rem;
+  }
+  .kw ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .kw li { font-size: var(--s-sm); padding: 0.2rem 0.65rem; border-radius: 4px; background: var(--chip); }
+
+  /* sections */
+  section.block { border-top: 1px solid var(--rule); padding-block: 2.75rem; }
+  .block-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+  h2 { font-family: var(--f-display); font-weight: 700; font-size: var(--s-xl); letter-spacing: -0.02em; margin: 0; }
+  .block-head p { margin: 0; color: var(--muted); font-size: var(--s-sm); }
+
+  /* news */
+  .news { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; max-width: 48rem; }
+  .news li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 1rem; }
+  .date { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); padding-top: 0.2rem; font-variant-numeric: tabular-nums; }
+  @media (max-width: 520px) { .news li { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+
+  /* research */
+  .papers { display: grid; gap: 2.5rem; }
+  .paper { display: grid; grid-template-columns: 18rem minmax(0, 1fr); gap: 1.75rem; align-items: start; }
+  .paper.feature { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  @media (max-width: 680px) { .paper { grid-template-columns: minmax(0, 1fr); gap: 1rem; } }
+  .fig { margin: 0; border-radius: 6px; overflow: hidden; background: var(--chip); border: 1px solid var(--rule); }
+  .fig img { width: 100%; height: auto; }
+  .paper:not(.feature) .fig:not(.whole) img { aspect-ratio: 4 / 3; object-fit: cover; }
+  .fig.whole { background: #fff; }
+  .fig.pip { max-width: 15rem; }
+  .paper .body { min-width: 0; max-width: 46rem; }
+  .venue { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); margin: 0 0 0.35rem; }
+  .venue .st { color: var(--learn); }
+  .paper h3 { font-size: var(--s-lg); line-height: 1.3; font-weight: 600; margin: 0; text-wrap: balance; letter-spacing: -0.005em; }
+  .authors { font-size: var(--s-sm); color: var(--muted); margin: 0.35rem 0 0; }
+  .authors b { color: var(--ink); font-weight: 600; }
+  .paper .tldr { margin: 0.75rem 0 0; }
+  .paper .role-line { margin: 0.5rem 0 0; font-size: var(--s-sm); color: var(--muted); }
+  .result { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; margin-top: 0.8rem; font-size: var(--s-sm); }
+  .result span { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); }
+  .result strong { font-family: var(--f-display); font-size: 1.15rem; color: var(--ink); margin-right: 0.35rem; letter-spacing: -0.01em; }
+  .plinks { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.9rem; font-family: var(--f-mono); font-size: var(--s-xs); }
+  .plinks a, .plinks span {
+    padding: 0.15rem 0.55rem; border: 1px solid var(--rule); border-radius: 4px;
+    text-decoration: none; color: var(--ink);
+  }
+  .plinks a:hover { border-color: var(--learn); color: var(--learn); }
+  .plinks span { color: var(--muted); border-style: dashed; }
+  .marks { font-size: var(--s-xs); color: var(--muted); margin-top: 2rem; }
+
+  /* lists */
+  .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 3.5rem; }
+  @media (max-width: 760px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+  .rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.95rem; }
+  .rows li { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; }
+  .rows .what b { font-weight: 600; }
+  .rows .what div { color: var(--muted); font-size: var(--s-sm); }
+  .rows .ko { font-family: "Noto Sans KR", var(--f-body); }
+  @media (max-width: 520px) { .rows li { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+  h3.sub { font-family: var(--f-display); font-size: var(--s-lg); font-weight: 700; letter-spacing: -0.01em; margin: 0 0 1rem; }
+
+  footer { border-top: 1px solid var(--rule); padding-block: 1.75rem 3rem; color: var(--muted); font-size: var(--s-xs); }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="name" href="#top">Sumin Lee</a>
+    <nav aria-label="Sections">
+      <a href="#research">Research</a>
+      <a class="hide-sm" href="#news">News</a>
+      <a class="hide-sm" href="#background">Background</a>
+      <a href="SMLee_CV.pdf">CV</a>
+      <button class="theme" id="themeBtn" type="button" aria-label="Switch light or dark theme">light/dark</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap intro">
+    <div>
+      <!-- 사진을 넣으려면: <img src="assets/profile.jpg" alt="Sumin Lee" style="width:96px;height:96px;border-radius:50%;object-fit:cover;margin-bottom:1.25rem"> -->
+      <h1>Sumin Lee<span class="ko" lang="ko">이수민</span></h1>
+      <p class="role">M.S. Student, Mechanical Systems Engineering · Autonomous Mechanical Systems Lab, Sookmyung Women's University</p>
+
+      <div class="bio">
+        <p>I build robots that turn language into manipulation programs, and I use simulation to check those programs before they run on a real robot.</p>
+        <p>My research covers three parts of that problem. <em>Generating</em> the program: LLMs that write and debug low-level code for robot perception and control, with calibration motions checked in simulation first (<a href="#moduloop">ModuLoop</a>). <em>Deciding how to execute it</em>: <span class="c">writing code</span> where geometry is enough and <span class="l">learning policies</span> where contact makes code brittle, with the whole program verified in a simulator aligned to the real scene (<a href="#when-to-code">When to Code, When to Learn</a>). <em>Perceiving the scene precisely</em>: accurate multi-camera calibration, which every precise manipulation task depends on and which also lets the simulator match the real scene (<a href="#cube-in-hand">Cube-in-Hand Calibration</a>).</p>
+        <p>I am advised by <em>Prof. Joo Yong Sim</em>.</p>
+      </div>
+
+      <div class="links">
+        <a href="SMLee_CV.pdf">CV</a>
+        <a href="https://scholar.google.com/citations?user=kraA0scAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
+        <a href="https://orcid.org/0009-0005-9994-8444" target="_blank" rel="noopener">ORCID</a>
+        <a href="https://github.com/sstonne" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/sumin-lee-335a98413/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:sstone@sookmyung.ac.kr">Email</a>
+      </div>
+      <div class="email">sstone@sookmyung.ac.kr</div>
+
+      <div class="kw">
+        <p class="label">Research keywords</p>
+        <ul>
+          <li>Robot Manipulation</li>
+          <li>LLMs for Robotics</li>
+          <li>Robot Learning</li>
+          <li>Sim-to-Real Transfer</li>
+          <li>Robot Perception</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <section class="block" id="news">
+    <div class="wrap">
+      <div class="block-head"><h2>News</h2></div>
+      <ul class="news">
+        <li><span class="date">2026</span><span>Submitted <i>When to Code, When to Learn</i> to IEEE RA-L as first author.</span></li>
+        <li><span class="date">2026</span><span>Presented <i>ModuLoop</i> at ICRA 2026.</span></li>
+        <li><span class="date">Dec 2025</span><span><i>ModuLoop</i> published in IEEE Robotics and Automation Letters.</span></li>
+        <li><span class="date">Sep 2025</span><span>Started my M.S. in Mechanical Systems Engineering at Sookmyung Women's University.</span></li>
+        <li><span class="date">2025</span><span>Filed two Korean patent applications on LLM-based robot control and pipetting automation.</span></li>
+        <li><span class="date">2024</span><span>Received the Minister of Science and ICT Award at the 4th X-Corps+ Festival.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block" id="research">
+    <div class="wrap">
+      <div class="block-head"><h2>Research</h2><p>Newest first</p></div>
+
+      <div class="papers">
+        <article class="paper feature" id="when-to-code">
+          <figure class="fig"><img src="assets/when-to-code.jpg" width="1600" height="728" alt="Framework overview: real-to-sim scene alignment, LLM agents that plan code and RL segments, teleport proxy execution, segment-level policy training, and hybrid execution."></figure>
+          <div class="body">
+            <p class="venue"><span class="st">Under review</span> · IEEE Robotics and Automation Letters (RA-L)</p>
+            <h3>When to Code, When to Learn: Real-to-Sim-Verified Hybrid Code–Policy Skill Generation for Long-Horizon Robot Manipulation</h3>
+            <p class="authors"><b>Sumin Lee</b>, Jiwoo Kim, Joo Yong Sim<sup>†</sup></p>
+            <p class="tldr">LLM agents split a multi-stage task into segments and decide, per segment, whether to write robot code or train an RL policy. A Teleport Synthesizer stands in for policies that don't exist yet, so the whole program can be verified in a real-to-sim aligned simulator before any training.</p>
+            <div class="result">
+              <span><strong>93.7%</strong>end-to-end success, table-leg assembly</span>
+              <span><strong>1.30 mm</strong>real-to-sim alignment error</span>
+            </div>
+            <div class="plinks"><span>Paper · coming soon</span></div>
+          </div>
+        </article>
+
+        <article class="paper" id="cube-in-hand">
+          <figure class="fig whole"><img src="assets/cube-setup.jpg" width="842" height="590" alt="Calibration setup: the robot grasps a multi-face AprilTag cube while three fixed cameras and a wrist camera observe it; arrows mark the transforms estimated jointly."></figure>
+          <div class="body">
+            <p class="venue"><span class="st">In progress</span></p>
+            <h3>Cube-in-Hand Multi-Camera Calibration</h3>
+            <p class="tldr">The robot grasps a multi-face AprilTag cube and moves it through the workspace, so fixed cameras and the wrist camera are all calibrated against one target in the robot base frame at once. Accurate calibration is the base for precise manipulation such as peg-in-hole, and for aligning simulation with the real scene.</p>
+            <div class="result">
+              <span><strong>0.3 mm</strong>calibration error, held-out validation</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="paper" id="moduloop">
+          <figure class="fig whole"><img src="assets/moduloop-tasks.jpg" width="1000" height="654" alt="Real-robot results for two instructions: putting snacks on a plate after &quot;I'm hungry&quot;, and picking up Mentos from farthest to nearest."></figure>
+          <div class="body">
+            <p class="venue">IEEE Robotics and Automation Letters (RA-L), vol. 10, no. 12, 2025 · <span class="st">Presented at ICRA 2026</span></p>
+            <h3>ModuLoop: Low-Level Code Generation Using Modular Synthesizer and Closed-Loop Debugger for Robotic Control</h3>
+            <p class="authors">Gina Yoon<sup>*</sup>, <b>Sumin Lee</b><sup>*</sup>, Joo Yong Sim<sup>†</sup></p>
+            <p class="tldr">An LLM synthesizes low-level robot control code module by module and repairs it through a closed-loop debugger. On a real UR3 arm it handles instructions from direct commands to open-ended requests like "I'm hungry, can you put some snacks on a plate?"</p>
+            <p class="role-line">My part: simulation environment, LLM-based object recognition, pick-and-place experiments.</p>
+            <div class="plinks"><a href="https://doi.org/10.1109/LRA.2025.3623437" target="_blank" rel="noopener">Paper</a></div>
+          </div>
+        </article>
+
+        <article class="paper" id="pipetting">
+          <figure class="fig whole pip"><img src="assets/pipette.jpg" width="533" height="612" alt="Custom pipette end-effector on a robot arm dispensing blue liquid into a cup."></figure>
+          <div class="body">
+            <p class="venue">Patent filed · KR 10-2025-0024332</p>
+            <h3>LLM-based Robotic Pipetting Automation</h3>
+            <p class="tldr">A 6-axis manipulator with a custom pipette end-effector that extracts target coordinates in real time and handles precision dispensing and inspection from LLM-processed instructions.</p>
+          </div>
+        </article>
+      </div>
+
+      <p class="marks">* Equal contribution &nbsp;·&nbsp; † Corresponding author</p>
+    </div>
+  </section>
+
+  <section class="block" id="background">
+    <div class="wrap cols">
+      <div>
+        <h3 class="sub">Education</h3>
+        <ul class="rows">
+          <li><span class="date">2025 – now</span><div class="what"><b>M.S., Mechanical Systems Engineering</b><div>Sookmyung Women's University · GPA 4.50/4.50</div></div></li>
+          <li><span class="date">2023 – 2025</span><div class="what"><b>B.S., IT Engineering</b><div>Sookmyung Women's University · GPA 4.01/4.50</div></div></li>
+        </ul>
+
+        <h3 class="sub" style="margin-top:2.25rem">Experience</h3>
+        <ul class="rows">
+          <li><span class="date">2025 – now</span><div class="what"><b>Graduate Researcher</b><div>Autonomous Mechanical Systems Lab</div></div></li>
+          <li><span class="date">2024 – 2025</span><div class="what"><b>Undergraduate Research Intern</b><div>Autonomous Mechanical Systems Lab</div></div></li>
+          <li><span class="date">2024</span><div class="what"><b>R&amp;D Intern, MD Robot</b><div>ROS packages, RS-485 motor driver communication, Android BLE app</div></div></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="sub">Patents</h3>
+        <ul class="rows">
+          <li><span class="date">2025</span><div class="what"><b>Robot control system based on closed-loop modular code synthesis and simulation pre-verification using LLMs</b><div class="ko" lang="ko">대규모 언어 모델을 이용한 폐루프 모듈형 코드 합성 및 시뮬레이션 사전검증 기반 로봇 제어 시스템 및 방법</div></div></li>
+          <li><span class="date">2025</span><div class="what"><b>Automated 6-axis manipulator pipette dispensing and inspection system</b><div>KR 10-2025-0024332</div></div></li>
+        </ul>
+
+        <h3 class="sub" style="margin-top:2.25rem">Awards</h3>
+        <ul class="rows">
+          <li><span class="date">2024</span><div class="what"><b>Minister of Science and ICT Award</b><div>4th X-Corps+ Festival</div></div></li>
+        </ul>
+
+        <h3 class="sub" style="margin-top:2.25rem">Other projects</h3>
+        <ul class="rows">
+          <li><span class="date">ROS</span><div class="what"><b>Autonomous indoor mobile robot</b><div>LiDAR + depth SLAM, path planning</div></div></li>
+          <li><span class="date">Vision</span><div class="what"><b>Assistive map for socially vulnerable groups</b><div>YOLO and Detectron2 perception</div></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Sumin Lee · Seoul</span>
+    <span>Last updated Oct 2026</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    try { var s = localStorage.getItem("theme"); if (s === "light" || s === "dark") root.setAttribute("data-theme", s); } catch (e) {}
+    document.getElementById("themeBtn").addEventListener("click", function () {
+      var cur = root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      var next = cur === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("theme", next); } catch (e) {}
+    });
+  })();
+</script>
+</body>
+</html>
