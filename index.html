@@ -159,33 +159,10 @@
   .three a:hover { text-decoration: underline; text-underline-offset: 3px; }
   .meta { margin: 1.25rem 0 0; font-size: 0.92rem; color: var(--muted); max-width: 60ch; }
   .meta b { color: var(--ink); font-weight: 600; }
+  .meta.off { margin-top: 0.35rem; }
+  .meta.off span { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 0.6rem; color: var(--policy); }
 
-  /* program strip: the signature visual, drawn from the paper's six-task results */
-  .prog-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 0.75rem 2rem; margin-bottom: 1.25rem; }
-  .prog-head p { margin: 0; max-width: 46ch; font-size: 1.05rem; }
-  .legend { display: flex; gap: 1rem; font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); }
-  .legend span::before { content: ""; display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 2px; margin-right: 0.4rem; vertical-align: -0.05em; }
-  .legend .lc::before { background: color-mix(in srgb, var(--code) 25%, transparent); border: 1px solid var(--code); }
-  .legend .lp::before { background: var(--policy); }
-  .prog { display: grid; gap: 0.5rem; padding: 1.1rem; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; }
-  .task { display: grid; grid-template-columns: 12.5rem minmax(0, 1fr) 1.5rem; gap: 0.9rem; align-items: center; }
-  @media (max-width: 640px) { .task { grid-template-columns: minmax(0, 1fr) 1.2rem; gap: 0.3rem 0.5rem; } .task .tname { grid-column: 1 / -1; } .segs li { padding: 0.4rem 0.4rem; font-size: 0.7rem; } }
-  .tname { font-size: 0.9rem; font-weight: 500; }
-  .tname small { font-family: var(--f-mono); font-size: 0.68rem; color: var(--muted); margin-left: 0.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
-  .segs { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; min-width: 0; }
-  .segs li {
-    flex: 1; min-width: 0; padding: 0.42rem 0.55rem; border-radius: 4px;
-    font-family: var(--f-mono); font-size: 0.74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    color: var(--code); border: 1px solid color-mix(in srgb, var(--code) 55%, transparent);
-    background: color-mix(in srgb, var(--code) 10%, transparent);
-    animation: lit 0.5s ease-out both;
-  }
-  .segs li.p { color: var(--bg); background: var(--policy); border-color: var(--policy); font-weight: 500; }
-  .segs li:nth-child(2) { animation-delay: .12s; } .segs li:nth-child(3) { animation-delay: .24s; } .segs li:nth-child(4) { animation-delay: .36s; }
-  @keyframes lit { from { filter: brightness(0.45); } to { filter: none; } }
-  .done { font-family: var(--f-mono); color: var(--code); text-align: center; }
-  .prog-note { margin: 0.75rem 0 0; font-size: 0.82rem; color: var(--muted); }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .segs li { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
   /* research entries */
   .works { display: grid; gap: 3.25rem; }
@@ -302,23 +279,8 @@
         </div>
       </div>
 
-      <p class="meta">Advised by <b>Prof. Joo Yong Sim</b>. Outside the lab, I love the slow pace of floating in the sea and snorkeling.</p>
-    </section>
-
-    <section id="programs" aria-labelledby="programs-h">
-      <h2 id="programs-h">Six tasks, six programs</h2>
-      <div class="prog-head">
-        <p>How <i>When to Code, When to Learn</i> split each task. Most steps stay as code; only the contact-critical step is learned.</p>
-        <div class="legend"><span class="lc">code</span><span class="lp">learned policy</span></div>
-      </div>
-      <div class="prog" role="table" aria-label="Step-by-step programs for six tasks">
-        <div class="task" role="row"><span class="tname" role="rowheader">3-block stacking<small>real</small></span><ol class="segs" role="cell"><li>pick</li><li>place</li><li>move</li></ol><span class="done" aria-label="success">✓</span></div>
-        <div class="task" role="row"><span class="tname" role="rowheader">Block uprighting<small>real</small></span><ol class="segs" role="cell"><li>pick</li><li>move</li><li>rotate</li></ol><span class="done" aria-label="success">✓</span></div>
-        <div class="task" role="row"><span class="tname" role="rowheader">Reorient-insertion<small>real</small></span><ol class="segs" role="cell"><li>pick</li><li>rotate</li><li>insert</li></ol><span class="done" aria-label="success">✓</span></div>
-        <div class="task" role="row"><span class="tname" role="rowheader">Peg-in-hole<small>sim</small></span><ol class="segs" role="cell"><li>pick</li><li>align</li><li class="p">insert</li></ol><span class="done" aria-label="success">✓</span></div>
-        <div class="task" role="row"><span class="tname" role="rowheader">T-block push to align<small>sim</small></span><ol class="segs" role="cell"><li>pick</li><li>approach</li><li class="p">align</li></ol><span class="done" aria-label="success">✓</span></div>
-        <div class="task" role="row"><span class="tname" role="rowheader">Table-leg assembly<small>sim</small></span><ol class="segs" role="cell"><li>pick</li><li>align</li><li class="p">insert ×4</li></ol><span class="done" aria-label="success">✓</span></div>
-      </div>
+      <p class="meta">Advised by <b>Prof. Joo Yong Sim</b>.</p>
+      <p class="meta off"><span>Off the clock</span>I love the slow pace of floating in the sea and snorkeling.</p>
     </section>
 
     <section id="research">
