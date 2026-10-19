@@ -12,370 +12,270 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+KR:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  /* Layout: fixed identity sidebar on the left, scrolling research column on the right.
-     Dark-first. Orange is the page accent; green and violet are reserved for code vs. learned policy. */
+  /* Classic academic homepage: bio beside a large portrait, then a paper list with thumbnails
+     and the featured project highlighted. Same tokens as the project page; light theme by choice.
+     Orange is the page accent; green and violet mean code vs. learned policy. */
   :root {
-    --bg: #0d1015;
-    --surface: #141920;
-    --raise: #1c222b;
-    --ink: #e9edf2;
-    --muted: #8d97a5;
-    --rule: #252c36;
-    --code: #7fd796;
-    --policy: #ad9fff;
-    --accent: #ff8a3d;
-    --fig: #ffffff;
-
-    --f-display: "Archivo", "IBM Plex Sans", system-ui, sans-serif;
-    --f-body: "IBM Plex Sans", "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --bg: #ffffff; --soft: #f5f6f8; --ink: #1a1e24; --muted: #5d6570; --rule: #e2e5e9;
+    --accent: #c95812; --accent-soft: #fdf1e8;
+    --code: #1d8549; --policy: #5a46d4;
+    --f-display: "Plus Jakarta Sans", "Noto Sans", system-ui, sans-serif;
+    --f-body: "Noto Sans", "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif;
     --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-    color-scheme: dark;
-  }
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-      --bg: #eef1f4;
-      --surface: #ffffff;
-      --raise: #e3e8ee;
-      --ink: #0f141a;
-      --muted: #596371;
-      --rule: #d2d8df;
-      --code: #1d8549;
-      --policy: #5a46d4;
-      --accent: #c2500f;
-      color-scheme: light;
-    }
-  }
-  :root[data-theme="light"] {
-    --bg: #eef1f4;
-    --surface: #ffffff;
-    --raise: #e3e8ee;
-    --ink: #0f141a;
-    --muted: #596371;
-    --rule: #d2d8df;
-    --code: #1d8549;
-    --policy: #5a46d4;
-    --accent: #c2500f;
     color-scheme: light;
   }
-
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body {
-    margin: 0; background: var(--bg); color: var(--ink);
-    font-family: var(--f-body); font-size: 1rem; line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-  }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 1rem; line-height: 1.7; -webkit-font-smoothing: antialiased; }
   img { max-width: 100%; display: block; }
-  a { color: inherit; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
-  .mono { font-family: var(--f-mono); }
+  .c { color: var(--code); } .p { color: var(--policy); }
 
-  .shell {
-    max-width: 88rem; margin: 0 auto; padding-inline: max(16px, 3vw);
-    display: grid; grid-template-columns: 21rem minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem);
-  }
-  @media (max-width: 980px) { .shell { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+  .wrap { max-width: 62rem; margin: 0 auto; padding-inline: max(16px, 4vw); }
 
-  /* ---------- sidebar ---------- */
-  .side {
-    position: sticky; top: env(safe-area-inset-top, 0px);
-    height: 100vh; overflow-y: auto;
-    padding-block: 2.5rem 2rem;
-    display: flex; flex-direction: column; gap: 1.6rem;
-    scrollbar-width: none;
-  }
-  .side::-webkit-scrollbar { display: none; }
-  @media (max-width: 980px) {
-    .side { position: static; height: auto; overflow: visible; padding-block: 2rem 1rem; }
-  }
-  .who { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 1.1rem; align-items: end; }
-  .avatar { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; }
-  .name {
-    margin: 0; font-family: var(--f-display); font-stretch: 125%; font-weight: 800;
-    font-size: 2.35rem; line-height: 0.92; letter-spacing: -0.01em; text-transform: uppercase;
-  }
-  .name span { display: block; }
-  .ko { margin: 0.45rem 0 0; font-family: "Noto Sans KR", var(--f-body); font-size: 0.85rem; color: var(--muted); }
-  .role { margin: 0; font-size: 0.88rem; color: var(--muted); line-height: 1.55; }
+  .strip { border-bottom: 1px solid var(--rule); position: sticky; top: env(safe-area-inset-top, 0px); background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); z-index: 5; }
+  .strip .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.2rem; font-size: 0.9rem; }
+  .strip .me { color: var(--ink); font-family: var(--f-display); font-weight: 800; letter-spacing: -0.01em; }
+  .strip nav { display: flex; gap: 1.2rem; }
+  .strip nav a { color: var(--muted); }
+  .strip nav a:hover { color: var(--accent); text-decoration: none; }
+  @media (max-width: 640px) { .strip nav a.opt { display: none; } }
+
+  .intro { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: clamp(2rem, 5vw, 4rem); align-items: start; padding-block: clamp(2.5rem, 6vw, 4rem) 1rem; }
+  @media (max-width: 760px) { .intro { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; } .photo { order: -1; width: 9rem; } }
+  .intro > div { min-width: 0; }
+  .photo img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 18px; box-shadow: 0 18px 40px -24px rgba(20, 30, 50, 0.45); }
+  h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(2.4rem, 6vw, 3.4rem); line-height: 1.05; letter-spacing: -0.03em; margin: 0; }
+  h1 .ko { font-family: "Noto Sans KR", var(--f-body); font-size: 0.4em; font-weight: 500; letter-spacing: 0; color: var(--muted); margin-left: 0.5em; vertical-align: 0.35em; }
+  .role { margin: 0.6rem 0 0; color: var(--muted); font-size: 0.95rem; }
   .role b { color: var(--ink); font-weight: 600; }
+  .lede { margin: 1.4rem 0 0; font-size: 1.12rem; line-height: 1.6; max-width: 40rem; }
+  .meta { margin: 0.9rem 0 0; color: var(--muted); font-size: 0.95rem; }
+  .meta b { color: var(--ink); font-weight: 600; }
+  .meta .tagl { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-right: 0.55rem; }
 
-  .toc { display: grid; gap: 0.1rem; font-family: var(--f-mono); font-size: 0.8rem; }
-  .toc a { text-decoration: none; color: var(--muted); padding: 0.2rem 0; display: flex; gap: 0.6rem; align-items: baseline; }
-  .toc a::before { content: ""; width: 0.9rem; height: 1px; background: var(--rule); transform: translateY(-0.25em); transition: width .2s, background .2s; }
-  .toc a:hover, .toc a.on { color: var(--ink); }
-  .toc a:hover::before, .toc a.on::before { width: 1.6rem; background: var(--accent); }
-  @media (max-width: 980px) { .toc { display: none; } }
-
-  .out { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .out a {
-    display: inline-block; text-decoration: none; font-size: 0.82rem; font-weight: 500;
-    padding: 0.28rem 0.7rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--surface);
-  }
-  .out a:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  .mail { margin: -0.6rem 0 0; font-size: 0.85rem; color: var(--muted); }
-  .mail span { color: var(--ink); user-select: all; font-family: var(--f-mono); font-size: 0.8rem; }
-  .copy {
-    display: inline-grid; place-items: center; width: 1.6rem; height: 1.6rem; margin-left: 0.25rem; vertical-align: middle;
-    color: var(--muted); background: none; border: 1px solid transparent; border-radius: 5px; cursor: pointer; padding: 0;
-  }
+  .btns { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1.4rem; }
+  .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.42rem 0.95rem; border-radius: 999px; background: #22262c; color: #fff; font-size: 0.86rem; font-weight: 600; }
+  .btn:hover { background: var(--accent); text-decoration: none; }
+  .btn svg { width: 0.95rem; height: 0.95rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .mail { margin: 0.9rem 0 0; font-size: 0.92rem; color: var(--muted); display: flex; align-items: center; flex-wrap: wrap; gap: 0.2rem; }
+  .mail span#mailAddr { color: var(--ink); user-select: all; font-family: var(--f-mono); font-size: 0.85rem; margin-left: 0.35rem; }
+  .copy { display: inline-grid; place-items: center; width: 1.7rem; height: 1.7rem; margin-left: 0.2rem; color: var(--muted); background: none; border: 1px solid transparent; border-radius: 6px; cursor: pointer; padding: 0; }
   .copy svg { width: 0.95rem; height: 0.95rem; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; grid-area: 1 / 1; }
   .copy .i-ok { display: none; }
-  .copy:hover { color: var(--ink); border-color: var(--rule); background: var(--surface); }
+  .copy:hover { color: var(--ink); border-color: var(--rule); background: var(--soft); }
   .copy.done { color: var(--accent); }
   .copy.done .i-copy { display: none; }
   .copy.done .i-ok { display: block; }
-  .copy-msg { font-family: var(--f-mono); font-size: 0.7rem; color: var(--accent); margin-left: 0.2rem; }
+  .copy-msg { font-family: var(--f-mono); font-size: 0.72rem; color: var(--accent); }
 
-  .label { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.55rem; }
-  .kw ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
-  .kw li { font-size: 0.86rem; padding-left: 0.85rem; position: relative; }
-  .kw li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 0.35rem; height: 0.35rem; border-radius: 1px; background: var(--accent); }
+  .kw { margin-top: 1.4rem; }
+  .label { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.6rem; }
+  .kw ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .kw li { font-size: 0.86rem; padding: 0.28rem 0.8rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); background: var(--accent-soft); color: var(--accent); font-weight: 500; }
 
-  .theme {
-    margin-top: auto; align-self: flex-start;
-    font: inherit; font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted);
-    background: none; border: 1px solid var(--rule); border-radius: 4px; padding: 0.2rem 0.6rem; cursor: pointer;
-  }
-  .theme:hover { color: var(--ink); }
-
-  /* ---------- main column ---------- */
-  main { min-width: 0; padding-block: 2.5rem 4rem; }
-  @media (max-width: 980px) { main { padding-block: 0.5rem 3rem; } .theme { margin-top: 0; } }
-  section { padding-block: 2.5rem; }
-  section + section { border-top: 1px solid var(--rule); }
-  h2 {
-    font-family: var(--f-display); font-stretch: 125%; font-weight: 800; text-transform: uppercase;
-    font-size: 0.95rem; letter-spacing: 0.04em; margin: 0 0 1.75rem;
-    display: flex; align-items: center; gap: 0.9rem;
-  }
-  h2::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
-
-  .lede {
-    font-family: var(--f-display); font-stretch: 112%; font-weight: 600;
-    font-size: clamp(1.55rem, 2.6vw, 2.25rem); line-height: 1.18; letter-spacing: -0.015em;
-    margin: 0; max-width: 34ch; text-wrap: balance;
-  }
-  .lede .c { color: var(--code); }
-  .lede .p { color: var(--policy); }
-
-  .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin-top: 2rem; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+  .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 2.25rem 0 0; }
   @media (max-width: 760px) { .three { grid-template-columns: minmax(0, 1fr); } }
-  .three > div { background: var(--surface); padding: 1.15rem 1.2rem 1.1rem; display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
-  .three .k { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
-  .three p { margin: 0; font-size: 0.92rem; color: var(--muted); }
-  .three a { margin-top: auto; font-size: 0.85rem; font-weight: 600; text-decoration: none; }
-  .three a:hover { color: var(--accent); }
-  .meta { margin: 1.25rem 0 0; font-size: 0.92rem; color: var(--muted); max-width: 60ch; }
-  .meta b { color: var(--ink); font-weight: 600; }
-  .meta.off { margin-top: 0.35rem; }
-  .meta.off span { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 0.6rem; color: var(--accent); }
+  .three > div { background: var(--soft); border-radius: 14px; padding: 1.15rem 1.25rem 1.1rem; display: flex; flex-direction: column; gap: 0.45rem; min-width: 0; }
+  .three .k { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+  .three p { margin: 0; font-size: 0.93rem; color: var(--muted); }
+  .three a { margin-top: auto; font-size: 0.9rem; font-weight: 600; }
 
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  section { padding-block: 2.75rem; }
+  section + section { border-top: 1px solid var(--rule); }
+  h2 { font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; letter-spacing: -0.02em; margin: 0 0 1.5rem; }
 
-  /* research entries */
-  .works { display: grid; gap: 3.25rem; }
-  .work { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 1.75rem 2.25rem; align-items: start; }
-  .work.wide { grid-template-columns: minmax(0, 1fr); }
-  @media (max-width: 760px) { .work { grid-template-columns: minmax(0, 1fr); } }
-  .fig { margin: 0; background: var(--fig); border-radius: 10px; overflow: hidden; border: 1px solid var(--rule); }
-  .fig img { width: 100%; height: auto; }
-  .fig.narrow { max-width: 17rem; }
-  .fig figcaption { background: var(--surface); color: var(--muted); font-size: 0.8rem; padding: 0.6rem 0.8rem; border-top: 1px solid var(--rule); }
-  .body { min-width: 0; }
-  .wide .body { max-width: 48rem; }
-  .tag { display: inline-flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 0.7rem; }
-  .tag span { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.04em; padding: 0.15rem 0.5rem; border-radius: 3px; border: 1px solid var(--rule); color: var(--muted); }
-  .tag span.hot, .tag span.ok { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
-  .work h3 { font-family: var(--f-display); font-stretch: 105%; font-weight: 700; font-size: 1.32rem; line-height: 1.22; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
-  .authors { margin: 0.45rem 0 0; font-size: 0.88rem; color: var(--muted); }
+  .papers { display: grid; gap: 0.5rem; }
+  .paper { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 1.6rem; padding: 1.2rem; border-radius: 14px; align-items: start; }
+  .paper.feature { background: var(--accent-soft); }
+  @media (max-width: 680px) { .paper { grid-template-columns: minmax(0, 1fr); gap: 0.9rem; } }
+  .thumb { margin: 0; background: #fff; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; display: block; }
+  .thumb img { width: 100%; height: auto; }
+  .thumb.crop img { aspect-ratio: 4 / 3; object-fit: cover; }
+  .paper .body { min-width: 0; }
+  .ptitle { display: block; font-family: var(--f-display); font-weight: 700; font-size: 1.08rem; line-height: 1.35; letter-spacing: -0.01em; margin: 0; color: var(--ink); }
+  a.ptitle:hover { color: var(--accent); text-decoration: none; }
+  .authors { margin: 0.35rem 0 0; font-size: 0.92rem; color: var(--muted); }
   .authors b { color: var(--ink); font-weight: 600; }
-  .venue { margin: 0.2rem 0 0; font-size: 0.85rem; color: var(--muted); font-style: italic; }
-  .work p.desc { margin: 0.85rem 0 0; }
-  .mine { margin: 0.6rem 0 0; font-size: 0.86rem; color: var(--muted); }
-  .stats { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; margin-top: 1.1rem; }
-  .stat b { display: block; font-family: var(--f-display); font-stretch: 125%; font-weight: 800; font-size: 1.85rem; line-height: 1; letter-spacing: -0.01em; }
-  .stat span { font-family: var(--f-mono); font-size: 0.72rem; color: var(--muted); }
-  .links { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.1rem; font-family: var(--f-mono); font-size: 0.75rem; }
-  .links a, .links span { padding: 0.25rem 0.65rem; border-radius: 4px; border: 1px solid var(--rule); text-decoration: none; }
-  .links a:hover { border-color: var(--accent); color: var(--accent); }
-  .links a.proj { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
-  .links a.proj:hover { background: var(--accent); color: var(--bg); }
-  .links span { color: var(--muted); border-style: dashed; }
-  .marks { margin: 2rem 0 0; font-size: 0.8rem; color: var(--muted); }
+  .venue { margin: 0.1rem 0 0; font-size: 0.92rem; font-style: italic; }
+  .venue .st { font-style: normal; font-weight: 600; color: var(--accent); }
+  .plinks { margin: 0.35rem 0 0; font-size: 0.9rem; }
+  .plinks > * + *::before { content: "/"; color: var(--muted); margin: 0 0.45rem; }
+  .plinks span { color: var(--muted); }
+  .paper .desc { margin: 0.6rem 0 0; font-size: 0.95rem; }
+  .paper .mine { margin: 0.35rem 0 0; font-size: 0.88rem; color: var(--muted); }
+  .result { display: flex; flex-wrap: wrap; gap: 0.3rem 1.4rem; margin-top: 0.6rem; font-size: 0.86rem; color: var(--muted); }
+  .result b { font-family: var(--f-display); font-weight: 800; font-size: 1.05rem; color: var(--ink); margin-right: 0.3rem; }
+  .marks { margin: 1rem 0 0 1.2rem; font-size: 0.82rem; color: var(--muted); }
 
-  /* lists */
-  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 3rem; }
-  @media (max-width: 860px) { .two { grid-template-columns: minmax(0, 1fr); } }
-  .two > div { min-width: 0; }
-  .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.95rem; }
-  .list li { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1rem; }
-  .list .d { font-family: var(--f-mono); font-size: 0.78rem; color: var(--muted); padding-top: 0.15rem; font-variant-numeric: tabular-nums; }
+  .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.85rem; }
+  .list li { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 1rem; }
+  .list .d { font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); padding-top: 0.15rem; font-variant-numeric: tabular-nums; }
   .list b { font-weight: 600; }
-  .list .s { color: var(--muted); font-size: 0.88rem; }
-  .list .ko2 { font-family: "Noto Sans KR", var(--f-body); color: var(--muted); font-size: 0.85rem; }
-  h3.mini { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin: 0 0 0.9rem; }
+  .list .s { color: var(--muted); font-size: 0.9rem; }
+  .list .ko2 { font-family: "Noto Sans KR", var(--f-body); color: var(--muted); font-size: 0.87rem; }
+  @media (max-width: 520px) { .list li { grid-template-columns: minmax(0, 1fr); gap: 0; } }
   .grid4 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.25rem 3rem; }
-  @media (max-width: 860px) { .grid4 { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 760px) { .grid4 { grid-template-columns: minmax(0, 1fr); } }
   .grid4 > div { min-width: 0; }
+  h3.mini { font-family: var(--f-mono); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin: 0 0 0.9rem; }
 
-  footer { border-top: 1px solid var(--rule); padding-block: 1.5rem 0; font-size: 0.8rem; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; }
+  footer { border-top: 1px solid var(--rule); padding-block: 1.75rem 3rem; font-size: 0.85rem; color: var(--muted); }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
-<div class="shell">
 
-  <aside class="side">
-    <div class="who">
-      <img class="avatar" src="assets/profile.jpg" width="480" height="600" alt="Portrait of Sumin Lee">
-      <div>
-        <h1 class="name"><span>Sumin</span><span>Lee</span></h1>
-        <p class="ko" lang="ko">이수민</p>
-      </div>
-    </div>
-
-    <p class="role"><b>M.S. Student</b>, Mechanical Systems Engineering<br>Autonomous Mechanical Systems Lab<br>Sookmyung Women's University, Seoul</p>
-
-    <nav class="toc" aria-label="Sections">
-      <a href="#about">About</a>
+<div class="strip">
+  <div class="wrap">
+    <a class="me" href="#top">Sumin Lee</a>
+    <nav aria-label="Sections">
       <a href="#research">Research</a>
-      <a href="#news">News</a>
-      <a href="#presentations">Presentations</a>
-      <a href="#background">Background</a>
+      <a class="opt" href="#news">News</a>
+      <a class="opt" href="#presentations">Presentations</a>
+      <a class="opt" href="#background">Background</a>
+      <a href="SMLee_CV.pdf" target="_blank" rel="noopener">CV</a>
     </nav>
+  </div>
+</div>
 
-    <ul class="out">
-      <li><a class="cv" href="SMLee_CV.pdf" target="_blank" rel="noopener">CV</a></li>
-      <li><a href="https://scholar.google.com/citations?user=kraA0scAAAAJ" target="_blank" rel="noopener">Scholar</a></li>
-      <li><a href="https://orcid.org/0009-0005-9994-8444" target="_blank" rel="noopener">ORCID</a></li>
-      <li><a href="https://github.com/sstonne" target="_blank" rel="noopener">GitHub</a></li>
-      <li><a href="https://www.linkedin.com/in/sumin-lee-335a98413/" target="_blank" rel="noopener">LinkedIn</a></li>
-    </ul>
-    <p class="mail">Email: <span id="mailAddr">sstone@sookmyung.ac.kr</span> <button class="copy" id="copyMail" type="button" aria-label="Copy email address" title="Copy email address"><svg class="i-copy" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h.5"/></svg><svg class="i-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></button></p>
+<main id="top">
+  <div class="wrap">
+    <div class="intro">
+      <div>
+        <h1>Sumin Lee<span class="ko" lang="ko">이수민</span></h1>
+        <p class="role"><b>M.S. Student</b>, Mechanical Systems Engineering · Autonomous Mechanical Systems Lab, Sookmyung Women's University</p>
 
-    <div class="kw">
-      <p class="label">Research keywords</p>
-      <ul>
-        <li>Robot Manipulation</li>
-        <li>LLMs for Robotics</li>
-        <li>Robot Learning</li>
-        <li>Sim-to-Real Transfer</li>
-        <li>Robot Perception</li>
-      </ul>
-    </div>
+        <p class="lede">I build robots that turn language into manipulation programs, deciding which steps to <span class="c">write as code</span> and which to <span class="p">learn</span>, and checking them in simulation before they run on a real robot.</p>
+        <p class="meta">Advised by <b>Prof. Joo Yong Sim</b>.</p>
+        <p class="meta"><span class="tagl">Off the clock</span>I love the slow pace of floating in the sea and snorkeling.</p>
 
-    <button class="theme" id="themeBtn" type="button" aria-label="Switch light or dark theme">light / dark</button>
-  </aside>
-
-  <main>
-    <section id="about">
-      <p class="lede">I build robots that turn language into manipulation programs, deciding which steps to <span class="c">write as code</span> and which to <span class="p">learn</span>, and checking them in simulation before they run on a real robot.</p>
-
-      <div class="three">
-        <div>
-          <span class="k">Generate</span>
-          <p>LLMs that write and debug low-level code for robot perception and control, with calibration motions checked in simulation first.</p>
-          <a href="#moduloop">ModuLoop →</a>
+        <div class="btns">
+          <a class="btn" href="SMLee_CV.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>CV</a>
+          <a class="btn" href="https://scholar.google.com/citations?user=kraA0scAAAAJ" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 1 9l11 6 11-6z"/><path d="M5 11.5V16c0 1.7 3.1 3.5 7 3.5s7-1.8 7-3.5v-4.5"/></svg>Scholar</a>
+          <a class="btn" href="https://orcid.org/0009-0005-9994-8444" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.5 10.5V17M8.5 7.2v.1M12 10.5h2.2a3.25 3.25 0 0 1 0 6.5H12z"/></svg>ORCID</a>
+          <a class="btn" href="https://github.com/sstonne" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4 1.3-4-2-6-2.5m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/sumin-lee-335a98413/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</a>
         </div>
-        <div>
-          <span class="k">Decide</span>
-          <p>Code where geometry is enough, learned policies where contact makes code brittle, with the whole program verified in a simulator aligned to the real scene.</p>
-          <a href="when-to-code/">When to Code, When to Learn →</a>
-        </div>
-        <div>
-          <span class="k">Perceive</span>
-          <p>Accurate multi-camera calibration, which every precise manipulation task depends on and which also lets the simulator match the real scene.</p>
-          <a href="#cube-in-hand">Cube-in-Hand Calibration →</a>
+        <p class="mail">Email: <span id="mailAddr">sstone@sookmyung.ac.kr</span><button class="copy" id="copyMail" type="button" aria-label="Copy email address" title="Copy email address"><svg class="i-copy" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h.5"/></svg><svg class="i-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg></button></p>
+
+        <div class="kw">
+          <p class="label">Research keywords</p>
+          <ul>
+            <li>Robot Manipulation</li>
+            <li>LLMs for Robotics</li>
+            <li>Robot Learning</li>
+            <li>Sim-to-Real Transfer</li>
+            <li>Robot Perception</li>
+          </ul>
         </div>
       </div>
+      <figure class="photo" style="margin:0"><img src="assets/profile.jpg" width="480" height="600" alt="Portrait of Sumin Lee"></figure>
+    </div>
 
-      <p class="meta">Advised by <b>Prof. Joo Yong Sim</b>.</p>
-      <p class="meta off"><span>Off the clock</span>I love the slow pace of floating in the sea and snorkeling.</p>
-    </section>
+    <div class="three">
+      <div>
+        <span class="k">Generate</span>
+        <p>LLMs that write and debug low-level code for robot perception and control, with calibration motions checked in simulation first.</p>
+        <a href="#moduloop">ModuLoop →</a>
+      </div>
+      <div>
+        <span class="k">Decide</span>
+        <p>Code where geometry is enough, learned policies where contact makes code brittle, with the whole program verified in a simulator aligned to the real scene.</p>
+        <a href="when-to-code/">When to Code, When to Learn →</a>
+      </div>
+      <div>
+        <span class="k">Perceive</span>
+        <p>Accurate multi-camera calibration, which every precise manipulation task depends on and which also lets the simulator match the real scene.</p>
+        <a href="#cube-in-hand">Cube-in-Hand Calibration →</a>
+      </div>
+    </div>
+  </div>
 
-    <section id="research">
+  <section id="research" style="border-top:0">
+    <div class="wrap">
       <h2>Research</h2>
-      <div class="works">
+      <div class="papers">
 
-        <article class="work wide" id="when-to-code">
-          <figure class="fig"><img src="assets/when-to-code.jpg" width="1600" height="728" alt="Framework overview: real-to-sim scene alignment, LLM agents that plan code and RL segments, teleport proxy execution, segment-level policy training, and hybrid execution."></figure>
+        <article class="paper feature" id="when-to-code">
+          <a class="thumb" href="when-to-code/"><img src="assets/when-to-code-results.jpg" width="1600" height="758" alt="Six tasks executed with hybrid programs, steps outlined green for code and purple for learned policies."></a>
           <div class="body">
-            <div class="tag"><span class="hot">Under review</span><span>IEEE RA-L</span><span>First author</span></div>
-            <h3>When to Code, When to Learn: Real-to-Sim-Verified Hybrid Code–Policy Skill Generation for Long-Horizon Robot Manipulation</h3>
+            <a class="ptitle" href="when-to-code/">When to Code, When to Learn: Real-to-Sim-Verified Hybrid Code–Policy Skill Generation for Long-Horizon Robot Manipulation</a>
             <p class="authors"><b>Sumin Lee</b>, Jiwoo Kim, Joo Yong Sim<sup>†</sup></p>
-            <p class="desc">LLM agents split a multi-stage task into segments and decide, per segment, whether to write robot code or train an RL policy. A Teleport Synthesizer stands in for policies that don't exist yet, so the whole program can be verified in a real-to-sim aligned simulator before any training.</p>
-            <div class="stats">
-              <div class="stat"><b>93.7%</b><span>end-to-end success, table-leg assembly</span></div>
-              <div class="stat"><b>1.30 mm</b><span>real-to-sim alignment error</span></div>
-            </div>
-            <div class="links"><a class="proj" href="when-to-code/">Project page →</a><span>Paper · coming soon</span></div>
+            <p class="venue"><span class="st">Under review</span> · IEEE Robotics and Automation Letters (RA-L)</p>
+            <p class="plinks"><a href="when-to-code/">project page</a><span>paper coming soon</span></p>
+            <p class="desc">LLM agents split a multi-stage task into segments and decide, per segment, whether to write robot code or train an RL policy, verifying the whole program in a real-to-sim aligned simulator before any training.</p>
+            <div class="result"><span><b>93.7%</b>table-leg assembly</span><span><b>1.30 mm</b>real-to-sim alignment</span></div>
           </div>
-          <figure class="fig">
-            <img src="assets/when-to-code-results.jpg" width="1600" height="758" alt="Execution results on six tasks. Real robot: 3-block stacking, block uprighting, reorient-insertion. Simulation: peg-in-hole, T-block push to align, table-leg assembly. Each step is outlined green for code or purple for a learned policy.">
-            <figcaption>Results on six tasks, real robot (left) and simulation (right). Green steps run as code, purple steps as learned policies.</figcaption>
-          </figure>
         </article>
 
-        <article class="work" id="cube-in-hand">
-          <figure class="fig"><img src="assets/cube-setup.jpg" width="842" height="590" alt="Calibration setup: the robot grasps a multi-face AprilTag cube while three fixed cameras and a wrist camera observe it; arrows mark the transforms estimated jointly."></figure>
+        <article class="paper" id="cube-in-hand">
+          <figure class="thumb"><img src="assets/cube-setup.jpg" width="842" height="590" alt="Calibration setup: the robot grasps a multi-face AprilTag cube while three fixed cameras and a wrist camera observe it."></figure>
           <div class="body">
-            <div class="tag"><span class="ok">In progress</span></div>
-            <h3>Cube-in-Hand Multi-Camera Calibration</h3>
+            <p class="ptitle">Cube-in-Hand Multi-Camera Calibration</p>
+            <p class="venue"><span class="st">In progress</span></p>
             <p class="desc">The robot grasps a multi-face AprilTag cube and moves it through the workspace, so fixed cameras and the wrist camera are all calibrated against one target in the robot base frame at once. Accurate calibration is the base for precise manipulation such as peg-in-hole, and for aligning simulation with the real scene.</p>
-            <div class="stats">
-              <div class="stat"><b>0.3 mm</b><span>calibration error, held-out validation</span></div>
-            </div>
+            <div class="result"><span><b>0.3 mm</b>calibration error, held-out validation</span></div>
           </div>
         </article>
 
-        <article class="work" id="moduloop">
-          <figure class="fig"><img src="assets/moduloop-tasks.jpg" width="1000" height="654" alt="Real-robot results for two instructions: putting snacks on a plate after &quot;I'm hungry&quot;, and picking up Mentos from farthest to nearest."></figure>
+        <article class="paper" id="moduloop">
+          <figure class="thumb"><img src="assets/moduloop-tasks.jpg" width="1000" height="654" alt="Real-robot results for two instructions: putting snacks on a plate after &quot;I'm hungry&quot;, and picking up Mentos from farthest to nearest."></figure>
           <div class="body">
-            <div class="tag"><span>IEEE RA-L 2025</span><span>Presented at ICRA 2026</span><span>Co-first author</span></div>
-            <h3>ModuLoop: Low-Level Code Generation Using Modular Synthesizer and Closed-Loop Debugger for Robotic Control</h3>
+            <a class="ptitle" href="https://doi.org/10.1109/LRA.2025.3623437" target="_blank" rel="noopener">ModuLoop: Low-Level Code Generation Using Modular Synthesizer and Closed-Loop Debugger for Robotic Control</a>
             <p class="authors">Gina Yoon<sup>*</sup>, <b>Sumin Lee</b><sup>*</sup>, Joo Yong Sim<sup>†</sup></p>
-            <p class="venue">IEEE Robotics and Automation Letters, vol. 10, no. 12, 2025</p>
+            <p class="venue">IEEE Robotics and Automation Letters (RA-L), vol. 10, no. 12, 2025 · presented at ICRA 2026</p>
+            <p class="plinks"><a href="https://doi.org/10.1109/LRA.2025.3623437" target="_blank" rel="noopener">paper</a></p>
             <p class="desc">An LLM synthesizes low-level robot control code module by module and repairs it through a closed-loop debugger. On a real UR3 arm it handles instructions from direct commands to open-ended requests like "I'm hungry, can you put some snacks on a plate?"</p>
             <p class="mine">My part: simulation environment, LLM-based object recognition, pick-and-place experiments.</p>
-            <div class="links"><a href="https://doi.org/10.1109/LRA.2025.3623437" target="_blank" rel="noopener">Paper ↗</a></div>
           </div>
         </article>
 
-        <article class="work" id="pipetting">
-          <figure class="fig narrow"><img src="assets/pipette.jpg" width="533" height="612" alt="Custom pipette end-effector on a robot arm dispensing blue liquid into a cup."></figure>
+        <article class="paper" id="pipetting">
+          <figure class="thumb crop"><img src="assets/pipette.jpg" width="533" height="612" alt="Custom pipette end-effector on a robot arm dispensing blue liquid into a cup." style="object-position:50% 40%"></figure>
           <div class="body">
-            <div class="tag"><span class="ok">Patent filed</span><span>KR 10-2025-0024332</span></div>
-            <h3>LLM-based Robotic Pipetting Automation</h3>
+            <p class="ptitle">LLM-based Robotic Pipetting Automation</p>
+            <p class="venue"><span class="st">Patent filed</span> · KR 10-2025-0024332</p>
             <p class="desc">A 6-axis manipulator with a custom pipette end-effector that extracts target coordinates in real time and handles precision dispensing and inspection from LLM-processed instructions.</p>
           </div>
         </article>
       </div>
       <p class="marks">* Equal contribution &nbsp;·&nbsp; † Corresponding author</p>
-    </section>
+    </div>
+  </section>
 
-    <section id="news">
+  <section id="news">
+    <div class="wrap">
       <h2>News</h2>
       <ul class="list">
-        <li><span class="d">2026</span><span>Submitted <i>When to Code, When to Learn</i> to IEEE RA-L as first author.</span></li>
+        <li><span class="d">2026</span><span>Submitted <i>When to Code, When to Learn</i> to IEEE RA-L as first author. <a href="when-to-code/">Project page</a></span></li>
         <li><span class="d">2026</span><span>Presented <i>ModuLoop</i> at ICRA 2026.</span></li>
         <li><span class="d">Dec 2025</span><span><i>ModuLoop</i> published in IEEE Robotics and Automation Letters.</span></li>
         <li><span class="d">Sep 2025</span><span>Started my M.S. in Mechanical Systems Engineering at Sookmyung Women's University.</span></li>
         <li><span class="d">2025</span><span>Filed two Korean patent applications on LLM-based robot control and pipetting automation.</span></li>
         <li><span class="d">2024</span><span>Received the Minister of Science and ICT Award at the 4th X-Corps+ Festival.</span></li>
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <section id="presentations">
+  <section id="presentations">
+    <div class="wrap">
       <h2>Presentations</h2>
       <ul class="list">
         <li><span class="d">2026</span><div><b>ModuLoop: Low-Level Code Generation Using Modular Synthesizer and Closed-Loop Debugger for Robotic Control</b><div class="s">ICRA 2026, RA-L paper presentation · Gina Yoon<sup>*</sup>, <b>Sumin Lee</b><sup>*</sup>, Joo Yong Sim<sup>†</sup></div></div></li>
         <li><span class="d">2026</span><div><b>Sim-to-Real Skill Generation for Long-Horizon and Contact-Rich Tasks</b><div class="s">KSME Bioengineering Division Spring Conference, poster · <b>Sumin Lee</b>, Joo Yong Sim<sup>†</sup></div></div></li>
         <li><span class="d">2025</span><div><b>LLM-based Robot Arm Pipette Precision Dispensing and Inspection Automation System</b><div class="ko2" lang="ko">LLM 기반 데이터 처리 및 실시간 좌표 추출을 통한 로봇 팔 피펫 정밀 분주 및 검토 자동화 시스템</div><div class="s">Korea Robotics Society Annual Conference (KRoC), poster · Gina Yoon, <b>Sumin Lee</b>, Sumin Lee, Seohwi Ha, Joo Yong Sim<sup>†</sup></div></div></li>
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <section id="background">
+  <section id="background">
+    <div class="wrap">
       <h2>Background</h2>
       <div class="grid4">
         <div>
@@ -409,34 +309,24 @@
           </ul>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+</main>
 
-    <footer>
-      <span>© 2026 Sumin Lee · Seoul</span>
-      <span>Last updated Oct 2026</span>
-    </footer>
-  </main>
-</div>
+<footer>
+  <div class="wrap">
+    <span>© 2026 Sumin Lee · Seoul</span>
+    <span>Last updated Oct 2026</span>
+  </div>
+</footer>
 
 <script>
   (function () {
-    var root = document.documentElement;
-    try { var s = localStorage.getItem("theme"); if (s === "light" || s === "dark") root.setAttribute("data-theme", s); } catch (e) {}
-    document.getElementById("themeBtn").addEventListener("click", function () {
-      var cur = root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
-      var next = cur === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      try { localStorage.setItem("theme", next); } catch (e) {}
-    });
-
     var copyBtn = document.getElementById("copyMail");
     var addr = document.getElementById("mailAddr");
-    function selectAddr() {
-      var r = document.createRange(); r.selectNodeContents(addr);
-      var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
-    }
     var msg = document.createElement("span"); msg.className = "copy-msg"; msg.setAttribute("aria-live", "polite");
     copyBtn.after(msg);
+    function selectAddr() { var r = document.createRange(); r.selectNodeContents(addr); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
     function flash(text) {
       copyBtn.classList.add("done"); msg.textContent = text;
       clearTimeout(copyBtn._t);
@@ -448,21 +338,6 @@
         navigator.clipboard.writeText(text).then(function () { flash("copied"); }, function () { selectAddr(); flash("press Ctrl+C"); });
       } else { selectAddr(); flash("press Ctrl+C"); }
     });
-
-    // highlight the sidebar link for the section in view
-    var links = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
-    if (!("IntersectionObserver" in window) || !links.length) return;
-    var byId = {};
-    links.forEach(function (a) { byId[a.getAttribute("href").slice(1)] = a; });
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting && byId[e.target.id]) {
-          links.forEach(function (a) { a.classList.remove("on"); });
-          byId[e.target.id].classList.add("on");
-        }
-      });
-    }, { rootMargin: "-40% 0px -55% 0px" });
-    Object.keys(byId).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
   })();
 </script>
 </body>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>When to Code, When to Learn</title>
-<meta name="description" content="Project page: real-to-sim-verified hybrid code–policy program generation for multi-stage robot manipulation. Sumin Lee, Jiwoo Kim, Joo Yong Sim.">
+<meta name="description" content="Project page: real-to-sim-verified hybrid code–policy skill generation for long-horizon robot manipulation. Sumin Lee, Jiwoo Kim, Joo Yong Sim.">
 <meta property="og:title" content="When to Code, When to Learn">
 <meta property="og:description" content="LLM agents decide, step by step, which parts of a robot task to write as code and which to learn with RL.">
 <meta property="og:image" content="https://sstonne.github.io/assets/when-to-code.jpg">
@@ -12,455 +12,443 @@
 <meta property="og:type" content="article">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+KR:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  /* Same system as the homepage: dark-first, orange page accent,
-     green and violet reserved for code vs. learned policy. Left rail follows the assignment's three parts. */
+  /* Classic robotics project-page layout (centered title, author block, pill buttons, teaser, abstract, BibTeX).
+     Single light theme by choice. Orange is the page accent; green and violet mean code vs. learned policy. */
   :root {
-    --bg: #0d1015; --surface: #141920; --raise: #1c222b;
-    --ink: #e9edf2; --muted: #8d97a5; --rule: #252c36;
-    --code: #7fd796; --policy: #ad9fff; --accent: #ff8a3d; --fig: #ffffff;
-    --f-display: "Archivo", "IBM Plex Sans", system-ui, sans-serif;
-    --f-body: "IBM Plex Sans", "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --bg: #ffffff; --soft: #f5f6f8; --ink: #1a1e24; --muted: #5d6570; --rule: #e2e5e9;
+    --accent: #c95812; --accent-soft: #fdf1e8; --navy: #133a7c;
+    --code: #1d8549; --policy: #5a46d4;
+    --f-display: "Plus Jakarta Sans", "Noto Sans", system-ui, sans-serif;
+    --f-body: "Noto Sans", "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif;
     --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-    color-scheme: dark;
-  }
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-      --bg: #eef1f4; --surface: #ffffff; --raise: #e3e8ee;
-      --ink: #0f141a; --muted: #596371; --rule: #d2d8df;
-      --code: #1d8549; --policy: #5a46d4; --accent: #c2500f;
-      color-scheme: light;
-    }
-  }
-  :root[data-theme="light"] {
-    --bg: #eef1f4; --surface: #ffffff; --raise: #e3e8ee;
-    --ink: #0f141a; --muted: #596371; --rule: #d2d8df;
-    --code: #1d8549; --policy: #5a46d4; --accent: #c2500f;
     color-scheme: light;
   }
-
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 1rem; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 1.02rem; line-height: 1.72; -webkit-font-smoothing: antialiased; }
   img { max-width: 100%; display: block; }
-  a { color: inherit; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
-  i { font-style: italic; }
   .c { color: var(--code); } .p { color: var(--policy); }
   .tok { font-family: var(--f-mono); font-size: 0.86em; font-weight: 500; }
 
-  .wrap { max-width: 76rem; margin: 0 auto; padding-inline: max(16px, 3vw); }
+  .wrap { max-width: 64rem; margin: 0 auto; padding-inline: max(16px, 4vw); }
+  .narrow { max-width: 50rem; margin-inline: auto; }
 
-  /* top bar */
-  .bar { border-bottom: 1px solid var(--rule); }
-  .bar .wrap { display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-height: 3.4rem; }
-  .home { text-decoration: none; font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); }
-  .home b { font-family: var(--f-display); font-stretch: 125%; font-weight: 800; color: var(--ink); text-transform: uppercase; letter-spacing: 0.01em; margin-left: 0.4rem; }
-  .home:hover b { color: var(--accent); }
-  .theme { font: inherit; font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); background: none; border: 1px solid var(--rule); border-radius: 4px; padding: 0.2rem 0.6rem; cursor: pointer; }
-  .theme:hover { color: var(--ink); }
+  /* top strip */
+  .strip { border-bottom: 1px solid var(--rule); }
+  .strip .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.2rem; font-size: 0.88rem; }
+  .strip a { color: var(--ink); font-weight: 600; }
+  .strip nav { display: flex; gap: 1.2rem; }
+  .strip nav a { color: var(--muted); font-weight: 500; }
+  .strip nav a:hover { color: var(--accent); text-decoration: none; }
+  @media (max-width: 640px) { .strip nav { display: none; } }
 
-  /* header */
-  header.top { padding-block: clamp(2.5rem, 6vw, 4.5rem) 2rem; }
-  .tag { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 1rem; }
-  .tag span { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.04em; padding: 0.15rem 0.55rem; border-radius: 3px; border: 1px solid var(--rule); color: var(--muted); }
-  .tag span.hot { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
-  h1 {
-    font-family: var(--f-display); font-stretch: 125%; font-weight: 800;
-    font-size: clamp(2.3rem, 6vw, 4.6rem); line-height: 0.98; letter-spacing: -0.02em; margin: 0; text-wrap: balance;
+  /* title block */
+  header.title { text-align: center; padding-block: clamp(2.5rem, 6vw, 4rem) 1.5rem; }
+  .logo { height: 1.9rem; width: auto; margin: 0 auto 2rem; }
+  h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(2.2rem, 5.5vw, 3.6rem); line-height: 1.08; letter-spacing: -0.025em; margin: 0; text-wrap: balance; }
+  .subtitle { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.1rem, 2.4vw, 1.45rem); line-height: 1.35; color: var(--ink); margin: 0.7rem auto 0; max-width: 40ch; text-wrap: balance; }
+  .venue { margin: 1.1rem 0 0; font-family: var(--f-display); font-weight: 700; color: var(--accent); font-size: 1.02rem; }
+  .authors { margin: 1.1rem 0 0; font-size: 1.08rem; }
+  .authors a, .authors span.a { color: var(--accent); font-weight: 500; margin: 0 0.35rem; }
+  .authors sup { color: var(--ink); font-size: 0.7em; margin-left: 0.05rem; }
+  .affil { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.92rem; }
+  .btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.4rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.5rem 1.05rem; border-radius: 999px;
+    background: #22262c; color: #fff; font-size: 0.9rem; font-weight: 600; border: 0; font-family: inherit; cursor: pointer;
   }
-  .sub { font-family: var(--f-display); font-stretch: 105%; font-weight: 600; font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.35; color: var(--muted); margin: 1rem 0 0; max-width: 52ch; text-wrap: balance; }
-  .authors { margin: 1.4rem 0 0; font-size: 0.95rem; }
-  .authors b { font-weight: 600; }
-  .authors .aff { display: block; color: var(--muted); font-size: 0.85rem; }
-  .btns { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1.4rem; }
-  .btns a, .btns span { font-size: 0.85rem; font-weight: 500; padding: 0.35rem 0.85rem; border-radius: 999px; border: 1px solid var(--rule); background: var(--surface); text-decoration: none; }
-  .btns a:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  .btns span { color: var(--muted); border-style: dashed; background: none; }
+  .btn:hover { background: var(--accent); text-decoration: none; }
+  .btn svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .btn.off { background: var(--soft); color: var(--muted); cursor: default; }
+  .btn.off:hover { background: var(--soft); }
 
-  .hero { margin: 0 0 1rem; background: var(--fig); border-radius: 12px; overflow: hidden; border: 1px solid var(--rule); }
-  .hero img { width: 100%; height: auto; }
-  .cap { font-size: 0.85rem; color: var(--muted); margin: 0.6rem 0 0; max-width: 80ch; }
+  /* teaser */
+  .teaser { margin: 2.25rem auto 0; }
+  .teaser .frame { border-radius: 12px; overflow: hidden; border: 1px solid var(--rule); box-shadow: 0 18px 40px -24px rgba(20, 30, 50, 0.35); }
+  .teaser img { width: 100%; height: auto; }
+  .tldr { text-align: center; margin: 1.1rem auto 0; max-width: 46rem; font-size: 1.05rem; }
+  .tldr b { font-weight: 600; }
 
-  /* body grid with section rail */
-  .layout { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: clamp(2rem, 4vw, 4rem); padding-block: 2rem 4rem; }
-  @media (max-width: 960px) { .layout { grid-template-columns: minmax(0, 1fr); } .rail { display: none; } }
-  .rail { position: sticky; top: 1.5rem; align-self: start; display: grid; gap: 0.15rem; font-family: var(--f-mono); font-size: 0.8rem; }
-  .rail a { text-decoration: none; color: var(--muted); padding: 0.2rem 0; display: flex; gap: 0.6rem; align-items: baseline; }
-  .rail a::before { content: ""; width: 0.9rem; height: 1px; background: var(--rule); transform: translateY(-0.25em); transition: width .2s, background .2s; }
-  .rail a:hover, .rail a.on { color: var(--ink); }
-  .rail a:hover::before, .rail a.on::before { width: 1.6rem; background: var(--accent); }
-  .rail .grp { margin: 0.9rem 0 0.2rem; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
-  .rail .grp:first-child { margin-top: 0; }
-
-  .content { min-width: 0; }
-  section { padding-block: 2.25rem; }
-  section + section { border-top: 1px solid var(--rule); }
-  .part { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.6rem; }
-  h2 { font-family: var(--f-display); font-stretch: 118%; font-weight: 800; font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1.1; letter-spacing: -0.015em; margin: 0 0 1.25rem; text-wrap: balance; }
-  h3 { font-family: var(--f-display); font-stretch: 108%; font-weight: 700; font-size: 1.15rem; margin: 0 0 0.4rem; }
-  .prose { max-width: 68ch; }
+  /* sections */
+  section { padding-block: 3.25rem; }
+  section.alt { background: var(--soft); }
+  .eyebrow { text-align: center; font-family: var(--f-mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.5rem; }
+  h2 { text-align: center; font-family: var(--f-display); font-weight: 800; font-size: clamp(1.6rem, 3.4vw, 2.2rem); letter-spacing: -0.02em; line-height: 1.15; margin: 0 0 1.75rem; text-wrap: balance; }
+  h3 { font-family: var(--f-display); font-weight: 700; font-size: 1.2rem; letter-spacing: -0.01em; margin: 0 0 0.5rem; }
   .prose p { margin: 0 0 1rem; }
+  .abstract { text-align: justify; hyphens: auto; }
   .muted { color: var(--muted); }
 
   .question {
-    margin: 0 0 1.75rem; padding: 1.4rem 1.5rem; border-radius: 10px; background: var(--surface); border: 1px solid var(--rule);
-    font-family: var(--f-display); font-stretch: 110%; font-weight: 600; font-size: clamp(1.2rem, 2.4vw, 1.6rem); line-height: 1.3; text-wrap: balance;
+    text-align: center; margin: 0 auto 2rem; max-width: 46rem; padding: 1.5rem 1.75rem; border-radius: 14px;
+    background: var(--bg); border: 1px solid var(--rule);
+    font-family: var(--f-display); font-weight: 700; font-size: clamp(1.2rem, 2.6vw, 1.6rem); line-height: 1.35; letter-spacing: -0.01em; text-wrap: balance;
   }
-  .question small { display: block; font-family: var(--f-mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+  .question small { display: block; font-family: var(--f-mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
 
-  .why { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; margin: 1.5rem 0; }
-  @media (max-width: 760px) { .why { grid-template-columns: minmax(0, 1fr); } }
-  .why > div { background: var(--surface); padding: 1.1rem 1.2rem; min-width: 0; }
-  .why b { display: block; font-family: var(--f-display); font-stretch: 108%; font-size: 1rem; margin-bottom: 0.35rem; }
-  .why p { margin: 0; font-size: 0.9rem; color: var(--muted); }
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 2rem 0; }
+  @media (max-width: 760px) { .cards { grid-template-columns: minmax(0, 1fr); } }
+  .card { background: var(--bg); border: 1px solid var(--rule); border-radius: 12px; padding: 1.15rem 1.25rem; min-width: 0; }
+  .card b { display: block; font-family: var(--f-display); font-weight: 700; margin-bottom: 0.3rem; }
+  .card p { margin: 0; font-size: 0.93rem; color: var(--muted); }
+  .card.hy { border-color: color-mix(in srgb, var(--accent) 45%, transparent); background: var(--accent-soft); }
 
-  .fig { margin: 1.5rem 0; }
-  .fig .frame { background: var(--fig); border-radius: 10px; overflow: hidden; border: 1px solid var(--rule); }
+  .fig { margin: 1.75rem 0; }
+  .fig .frame { border-radius: 12px; overflow: hidden; border: 1px solid var(--rule); background: #fff; }
   .fig img { width: 100%; height: auto; }
-  .fig figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 0.6rem; max-width: 80ch; }
+  .fig figcaption { font-size: 0.9rem; color: var(--muted); margin: 0.7rem auto 0; max-width: 52rem; text-align: center; }
   .fig figcaption b { color: var(--ink); font-weight: 600; }
 
-  /* method steps */
-  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.75rem; counter-reset: s; }
-  .steps > li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 1rem; counter-increment: s; }
-  .steps > li::before {
-    content: counter(s); font-family: var(--f-display); font-stretch: 125%; font-weight: 800; font-size: 1.1rem;
-    width: 2.4rem; height: 2.4rem; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--accent); color: var(--accent);
-  }
+  .steps { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; gap: 2.25rem; counter-reset: s; }
+  .steps > li { display: grid; grid-template-columns: 2.8rem minmax(0, 1fr); gap: 1.1rem; counter-increment: s; }
+  .steps > li::before { content: counter(s); font-family: var(--f-display); font-weight: 800; font-size: 1.05rem; width: 2.5rem; height: 2.5rem; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: #fff; }
   .steps .body { min-width: 0; }
-  .steps p { margin: 0 0 0.6rem; }
-  .side-by-side { display: grid; grid-template-columns: minmax(0, 1fr) 16rem; gap: 1.5rem; align-items: start; margin-top: 0.8rem; }
-  @media (max-width: 760px) { .side-by-side { grid-template-columns: minmax(0, 1fr); } }
+  .steps p { margin: 0 0 0.6rem; color: var(--muted); }
+  .steps p b { color: var(--ink); }
+  .two { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: 1.5rem; align-items: start; }
+  @media (max-width: 760px) { .two { grid-template-columns: minmax(0, 1fr); } }
 
-  /* program strip */
-  .legend { display: flex; gap: 1rem; font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); margin: 0 0 0.6rem; }
-  .legend span::before { content: ""; display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 2px; margin-right: 0.4rem; vertical-align: -0.05em; }
-  .legend .lc::before { background: color-mix(in srgb, var(--code) 25%, transparent); border: 1px solid var(--code); }
-  .legend .lp::before { background: var(--policy); }
-  .prog { display: grid; gap: 0.5rem; padding: 1.1rem; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; }
-  .task { display: grid; grid-template-columns: 12.5rem minmax(0, 1fr) 1.5rem; gap: 0.9rem; align-items: center; }
-  @media (max-width: 640px) { .task { grid-template-columns: minmax(0, 1fr) 1.2rem; gap: 0.3rem 0.5rem; } .task .tname { grid-column: 1 / -1; } }
-  .tname { font-size: 0.9rem; font-weight: 500; }
-  .tname small { font-family: var(--f-mono); font-size: 0.68rem; color: var(--muted); margin-left: 0.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
-  .segs { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; min-width: 0; }
-  .segs li { flex: 1; min-width: 0; padding: 0.42rem 0.55rem; border-radius: 4px; font-family: var(--f-mono); font-size: 0.74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--code); border: 1px solid color-mix(in srgb, var(--code) 55%, transparent); background: color-mix(in srgb, var(--code) 10%, transparent); }
-  .segs li.p { color: var(--bg); background: var(--policy); border-color: var(--policy); font-weight: 500; }
-  @media (max-width: 640px) { .segs li { padding: 0.4rem; font-size: 0.7rem; } }
-  .done { font-family: var(--f-mono); color: var(--code); text-align: center; }
-
-  /* findings */
-  .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; margin: 0 0 1.5rem; }
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 0 0 2.25rem; }
   @media (max-width: 860px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .stats > div { background: var(--surface); padding: 1rem 1.1rem; min-width: 0; }
-  .stats b { display: block; font-family: var(--f-display); font-stretch: 125%; font-weight: 800; font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1.05; }
-  .stats span { display: block; font-size: 0.82rem; color: var(--muted); margin-top: 0.3rem; }
-  .finding { margin: 2rem 0 0; }
-  .finding > p { max-width: 68ch; }
-  .tablebox { overflow-x: auto; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); margin-top: 0.9rem; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; font-variant-numeric: tabular-nums; min-width: 34rem; }
-  th, td { padding: 0.6rem 0.9rem; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  .stat { text-align: center; background: var(--bg); border: 1px solid var(--rule); border-radius: 12px; padding: 1.1rem 0.9rem; min-width: 0; }
+  .stat b { display: block; font-family: var(--f-display); font-weight: 800; font-size: clamp(1.6rem, 3.4vw, 2.2rem); letter-spacing: -0.02em; color: var(--accent); line-height: 1.1; }
+  .stat span { display: block; font-size: 0.84rem; color: var(--muted); margin-top: 0.35rem; line-height: 1.45; }
+
+  .legend { display: flex; justify-content: center; gap: 1.1rem; font-family: var(--f-mono); font-size: 0.76rem; color: var(--muted); margin: 0 0 0.7rem; }
+  .legend span::before { content: ""; display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 3px; margin-right: 0.4rem; vertical-align: -0.08em; }
+  .legend .lc::before { background: color-mix(in srgb, var(--code) 18%, #fff); border: 1px solid var(--code); }
+  .legend .lp::before { background: var(--policy); }
+  .prog { display: grid; gap: 0.5rem; padding: 1.2rem; background: var(--bg); border: 1px solid var(--rule); border-radius: 12px; }
+  .task { display: grid; grid-template-columns: 12.5rem minmax(0, 1fr) 1.4rem; gap: 0.9rem; align-items: center; }
+  @media (max-width: 640px) { .task { grid-template-columns: minmax(0, 1fr) 1.2rem; gap: 0.3rem 0.5rem; } .task .tname { grid-column: 1 / -1; } }
+  .tname { font-size: 0.92rem; font-weight: 600; }
+  .tname small { font-family: var(--f-mono); font-size: 0.68rem; font-weight: 400; color: var(--muted); margin-left: 0.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .segs { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; min-width: 0; }
+  .segs li { flex: 1; min-width: 0; padding: 0.42rem 0.55rem; border-radius: 5px; font-family: var(--f-mono); font-size: 0.76rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--code); border: 1px solid color-mix(in srgb, var(--code) 50%, transparent); background: color-mix(in srgb, var(--code) 8%, #fff); }
+  .segs li.p { color: #fff; background: var(--policy); border-color: var(--policy); font-weight: 500; }
+  @media (max-width: 640px) { .segs li { padding: 0.4rem; font-size: 0.7rem; } }
+  .done { font-family: var(--f-mono); color: var(--code); text-align: center; font-weight: 600; }
+  .note { font-size: 0.85rem; color: var(--muted); margin: 0.6rem 0 0; text-align: center; }
+
+  .finding { margin-top: 2.75rem; }
+  .finding > p { margin: 0 0 0.4rem; color: var(--muted); }
+  .tablebox { overflow-x: auto; border: 1px solid var(--rule); border-radius: 12px; background: var(--bg); margin-top: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; font-variant-numeric: tabular-nums; min-width: 34rem; }
+  th, td { padding: 0.65rem 0.95rem; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
   th:first-child, td:first-child { text-align: left; }
-  thead th { font-family: var(--f-mono); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.04em; color: var(--muted); }
+  thead th { font-family: var(--f-mono); font-size: 0.73rem; font-weight: 500; color: var(--muted); background: var(--soft); }
   tbody tr:last-child td { border-bottom: 0; }
-  td.ours, th.ours { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+  .ours { background: var(--accent-soft); }
+  thead th.ours { background: color-mix(in srgb, var(--accent) 14%, #fff); color: var(--ink); }
   td b { font-weight: 700; color: var(--accent); }
   td small { color: var(--muted); }
-  .tnote { font-size: 0.8rem; color: var(--muted); margin: 0.5rem 0 0; }
 
-  .pert { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 0.9rem; }
+  .pert { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
   @media (max-width: 760px) { .pert { grid-template-columns: minmax(0, 1fr); } }
-  .pert > div { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 1rem 1.1rem; min-width: 0; }
-  .pert h4 { margin: 0 0 0.7rem; font-size: 0.88rem; font-weight: 600; }
-  .bar2 { display: grid; grid-template-columns: 3.4rem minmax(0, 1fr) 2.6rem; gap: 0.5rem; align-items: center; font-size: 0.78rem; margin-top: 0.35rem; }
+  .pert > div { background: var(--bg); border: 1px solid var(--rule); border-radius: 12px; padding: 1rem 1.1rem; min-width: 0; }
+  .pert h4 { margin: 0 0 0.7rem; font-size: 0.9rem; font-weight: 600; }
+  .bar2 { display: grid; grid-template-columns: 3.4rem minmax(0, 1fr) 2.6rem; gap: 0.5rem; align-items: center; font-size: 0.8rem; margin-top: 0.4rem; }
   .bar2 .lab { font-family: var(--f-mono); color: var(--muted); }
-  .bar2 .track { height: 0.6rem; background: var(--raise); border-radius: 2px; overflow: hidden; }
-  .bar2 .fill { height: 100%; border-radius: 2px; }
+  .bar2 .track { height: 0.65rem; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .bar2 .fill { display: block; height: 100%; border-radius: 3px; }
   .bar2 .fill.c { background: var(--code); } .bar2 .fill.p { background: var(--policy); }
   .bar2 .v { font-family: var(--f-mono); text-align: right; font-variant-numeric: tabular-nums; }
 
-  .limits { margin-top: 2rem; padding: 1rem 1.2rem; border-left: 2px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; font-size: 0.9rem; color: var(--muted); max-width: 72ch; }
-  .limits b { color: var(--ink); }
+  .limits { margin: 2.5rem auto 0; max-width: 50rem; padding: 1rem 1.25rem; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 10px 10px 0; font-size: 0.93rem; }
 
-  /* outputs */
   .outs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 3rem; }
   @media (max-width: 760px) { .outs { grid-template-columns: minmax(0, 1fr); } }
   .outs > div { min-width: 0; }
-  .outs h3 { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin: 0 0 0.8rem; }
-  .plist { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+  .label { font-family: var(--f-mono); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.8rem; }
+  .plist { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
   .plist b { font-weight: 600; }
-  .plist .s { display: block; color: var(--muted); font-size: 0.88rem; }
-  .gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
-  .gallery a { display: block; text-decoration: none; }
-  .gallery .th { background: var(--fig); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; aspect-ratio: 16 / 10; }
-  .gallery .th img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
-  .gallery span { display: block; font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
-  .gallery a:hover span { color: var(--accent); }
+  .plist .s { display: block; color: var(--muted); font-size: 0.9rem; }
   .kwl { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .kwl li { font-size: 0.85rem; padding: 0.25rem 0.7rem; border-radius: 999px; border: 1px solid var(--rule); background: var(--surface); }
-  .kwl li.main { border-color: color-mix(in srgb, var(--accent) 55%, transparent); color: var(--accent); }
+  .kwl li { font-size: 0.86rem; padding: 0.28rem 0.75rem; border-radius: 999px; border: 1px solid var(--rule); background: var(--bg); }
+  .kwl li.main { border-color: color-mix(in srgb, var(--accent) 50%, transparent); background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+  .gallery { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.7rem; margin-top: 0.4rem; }
+  @media (max-width: 760px) { .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .gallery a { display: block; color: var(--muted); font-size: 0.78rem; }
+  .gallery .th { background: #fff; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; aspect-ratio: 4 / 3; }
+  .gallery .th img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+  .gallery span { display: block; margin-top: 0.35rem; }
+  .gallery a:hover { color: var(--accent); text-decoration: none; }
 
-  footer { border-top: 1px solid var(--rule); padding-block: 1.5rem 3rem; font-size: 0.8rem; color: var(--muted); }
+  .bib { position: relative; margin-top: 0.4rem; }
+  .bib pre { margin: 0; padding: 1.1rem 1.25rem; background: #22262c; color: #e8ebef; border-radius: 12px; font-family: var(--f-mono); font-size: 0.82rem; line-height: 1.6; overflow-x: auto; }
+  .copy { position: absolute; top: 0.6rem; right: 0.6rem; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.6rem; border-radius: 6px; border: 1px solid #444b55; background: #2d323a; color: #cfd5dc; font-family: var(--f-mono); font-size: 0.72rem; cursor: pointer; }
+  .copy:hover { background: #3a414b; color: #fff; }
+  .copy svg { width: 0.9rem; height: 0.9rem; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  footer { border-top: 1px solid var(--rule); padding-block: 1.75rem 3rem; font-size: 0.85rem; color: var(--muted); }
   footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; }
-  footer a { color: var(--ink); }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
 
-<div class="bar">
+<div class="strip">
   <div class="wrap">
-    <a class="home" href="../">← <b>Sumin Lee</b></a>
-    <button class="theme" id="themeBtn" type="button" aria-label="Switch light or dark theme">light / dark</button>
+    <a href="../">← Sumin Lee</a>
+    <nav aria-label="On this page">
+      <a href="#abstract">Abstract</a>
+      <a href="#problem">Problem &amp; Why</a>
+      <a href="#method">Method</a>
+      <a href="#findings">Findings</a>
+      <a href="#outputs">Outputs</a>
+    </nav>
   </div>
 </div>
 
-<header class="top wrap">
-  <div class="tag"><span class="hot">Under review</span><span>IEEE Robotics and Automation Letters</span><span>First author</span></div>
-  <h1>When to Code, <span class="c">When</span> to <span class="p">Learn</span></h1>
-  <p class="sub">Real-to-Sim-Verified Hybrid Code–Policy Skill Generation for Long-Horizon Robot Manipulation</p>
-  <p class="authors"><b>Sumin Lee</b>, Jiwoo Kim, Joo Yong Sim<sup>†</sup>
-    <span class="aff">Autonomous Mechanical Systems Lab, Sookmyung Women's University · † Corresponding author</span></p>
+<header class="title wrap">
+  <img class="logo" src="../assets/sookmyung-logo.png" width="839" height="96" alt="Sookmyung Women's University">
+  <h1>When to <span class="c">Code</span>, When to <span class="p">Learn</span></h1>
+  <p class="subtitle">Real-to-Sim-Verified Hybrid Code–Policy Skill Generation for Long-Horizon Robot Manipulation</p>
+  <p class="venue">Under review at IEEE Robotics and Automation Letters (RA-L)</p>
+  <p class="authors"><a href="../">Sumin Lee</a><sup>1</sup> <span class="a">Jiwoo Kim</span><sup>1</sup> <span class="a">Joo Yong Sim</span><sup>1,†</sup></p>
+  <p class="affil"><sup>1</sup>Autonomous Mechanical Systems Lab, Sookmyung Women's University &nbsp;·&nbsp; <sup>†</sup>Corresponding author</p>
   <div class="btns">
-    <span>Paper · coming soon</span>
-    <a href="#outputs">Figures &amp; outputs</a>
-    <a href="../SMLee_CV.pdf" target="_blank" rel="noopener">CV</a>
+    <span class="btn off" title="Available after review"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg>Paper (soon)</span>
+    <a class="btn" href="#findings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Results</a>
+    <a class="btn" href="#bibtex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg>BibTeX</a>
+    <a class="btn" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Homepage</a>
   </div>
+
+  <figure class="teaser fig" style="margin-bottom:0">
+    <div class="frame"><img src="../assets/when-to-code-results.jpg" width="1600" height="758" alt="Six tasks executed end to end. Real robot: 3-block stacking, block uprighting, reorient-insertion. Simulation: peg-in-hole, T-block push to align, table-leg assembly. Each step is outlined green for code or purple for a learned policy."></div>
+  </figure>
+  <p class="tldr"><b>TL;DR</b> LLM agents split a robot task into segments and decide, for each one, whether to <span class="c">write it as code</span> or <span class="p">learn it with RL</span>. The whole program is verified in a simulator aligned to the real scene before any policy is trained.</p>
 </header>
 
-<div class="wrap">
-  <figure class="hero"><img src="../assets/when-to-code.jpg" width="1600" height="728" alt="Framework overview: real-to-sim scene alignment, LLM agents that plan code and RL segments, teleport proxy execution, segment-level policy training, and hybrid execution."></figure>
-  <p class="cap">From a language command and calibrated multi-view RGB-D views, LLM agents build a hybrid program, verify it in a scene-aligned simulator, and train policies only where they are needed.</p>
-</div>
-
-<div class="wrap layout">
-  <nav class="rail" aria-label="On this page">
-    <span class="grp">Problem &amp; Why</span>
-    <a href="#problem">Research question</a>
-    <span class="grp">Methods &amp; Findings</span>
-    <a href="#method">Method</a>
-    <a href="#findings">Findings</a>
-    <span class="grp">Outputs</span>
-    <a href="#outputs">Figures &amp; papers</a>
-  </nav>
-
-  <div class="content">
-
-    <section id="problem">
-      <p class="part">Problem &amp; Why</p>
-      <h2>Code is reliable until contact. Learning is robust but expensive.</h2>
-      <div class="question"><small>Research question</small>In a multi-stage manipulation task, which steps should a robot <span class="c">write as code</span>, and which should it <span class="p">learn</span>?</div>
-
-      <div class="prose">
-        <p>Large language models can turn a sentence like "assemble the table legs into the tabletop" into robot code. That code works well for steps that geometry fully describes, such as grasping or moving above a hole. It breaks at steps that depend on precise contact, like a tight insertion, where a few millimeters of error decide success.</p>
-        <p>Reinforcement learning handles contact well, but learning a whole multi-stage task is slow and needs a task-specific observation and reward design every time. Neither tool alone fits a task that mixes both kinds of step.</p>
-      </div>
-
-      <div class="why">
-        <div><b class="c">Code only</b><p>Fast and interpretable, but brittle at contact. Code-only generation never completed table-leg assembly.</p></div>
-        <div><b class="p">Learning only</b><p>Adapts to contact, but training the full task is inefficient and needs hand-designed rewards per task.</p></div>
-        <div><b>Hybrid, per segment</b><p>Keep the geometric steps as code and learn only the contact-critical ones, inside one executable program.</p></div>
-      </div>
-
-      <figure class="fig">
-        <div class="frame"><img src="img/code-vs-hybrid.jpg" width="1600" height="746" loading="lazy" alt="Table-leg assembly in simulation. Top row, code only: the legs fall over and the task fails. Bottom row, hybrid code plus RL policy: all four legs are inserted and the task succeeds."></div>
-        <figcaption><b>Why it matters.</b> Table-leg assembly with code alone fails at insertion (top). Replacing only the insertion step with a learned policy completes the task (bottom).</figcaption>
-      </figure>
-    </section>
-
-    <section id="method">
-      <p class="part">Methods &amp; Findings</p>
-      <h2>How the framework builds a hybrid program</h2>
-
-      <ol class="steps">
-        <li><div class="body">
-          <h3>Align the real scene in simulation</h3>
-          <p class="muted">Four calibrated RGB-D cameras observe the workspace. Each object is segmented (SAM 2), turned into a 3-D mesh (SAM 3D), rescaled to its measured size, and posed in the robot base frame (FoundationPose). The result is a simulator that matches the real scene object by object.</p>
-          <figure class="fig"><div class="frame"><img src="img/real-to-sim.jpg" width="1600" height="930" loading="lazy" alt="Real-to-sim object alignment pipeline: multi-camera calibration, multi-view RGB-D fusion and segmentation, metric scale correction of generated meshes, 6-DoF pose estimation, and instantiation in simulation."></div>
-            <figcaption>Object-centric real-to-sim alignment. Across ten objects the aligned assets are within <b>1.30 mm</b> mean absolute error.</figcaption></figure>
-        </div></li>
-
-        <li><div class="body">
-          <h3>Plan the task as <span class="tok c">[CODE]</span> and <span class="tok p">[RL]</span> segments</h3>
-          <p class="muted">A target-scene generator turns the command into a goal state. The LLM planner splits the task into ordered segments and labels each one: code if the robot API can do it and it tolerates pose error, RL if it is sensitive to contact or uncertain dynamics. The code generator writes Python robot-API calls and leaves a named placeholder for every RL call.</p>
-        </div></li>
-
-        <li><div class="body">
-          <h3>Verify and repair the program before training anything</h3>
-          <div class="side-by-side">
-            <div>
-              <p class="muted">Policies don't exist yet, so a <b>Teleport Synthesizer</b> stands in for each RL call: it teleports the objects to that segment's target state so the rest of the program can run. The verifier checks for runtime errors, collisions and goal satisfaction. When a rollout fails, an analyzer reads the logs and the code generator revises the code; if a code step keeps failing at contact, the planner reassigns just that step from <span class="tok c">[CODE]</span> to <span class="tok p">[RL]</span>.</p>
-              <p class="muted">The same teleport rollout records each RL segment's start state <span class="tok">S<sub>pre</sub></span> and goal <span class="tok">S<sub>post</sub></span>, which become its local learning problem.</p>
-            </div>
-            <figure class="fig" style="margin:0"><div class="frame"><img src="img/hybrid-integration.jpg" width="900" height="1274" loading="lazy" alt="Hybrid code-policy integration: planning into segments, a first rollout with a teleport proxy that extracts start and goal states, segment-level policy training with observation and reward design, and a final rollout with the learned policy."></div></figure>
-          </div>
-        </div></li>
-
-        <li><div class="body">
-          <h3>Learn only the RL segments, then plug them back in</h3>
-          <p class="muted">An RL-Designer builds the observation space and generates reward code (Eureka-style), trains each segment with PPO in Isaac Lab, and revises the design from training feedback. The trained policy replaces the teleport proxy at the same call site. Verified code is saved as a reusable skill, and policy checkpoints can be reused by other programs for the same task.</p>
-        </div></li>
-      </ol>
-    </section>
-
-    <section id="findings">
-      <p class="part">Methods &amp; Findings</p>
-      <h2>What we found</h2>
-
-      <div class="stats">
-        <div><b>90.9%</b><span>end-to-end success over 15 hybrid program–policy pairings (3,491 / 3,840)</span></div>
-        <div><b>93.7%</b><span>table-leg assembly, where code-only generation reached 0%</span></div>
-        <div><b>8 → 92%</b><span>T-block push program generation with a reusable code skill</span></div>
-        <div><b>1.30 mm</b><span>real-to-sim object alignment error, ten objects</span></div>
-      </div>
-
-      <div>
-        <p class="legend"><span class="lc">code</span><span class="lp">learned policy</span></p>
-        <div class="prog" role="table" aria-label="Step-by-step programs for six tasks">
-          <div class="task" role="row"><span class="tname" role="rowheader">3-block stacking<small>real</small></span><ol class="segs" role="cell"><li>pick</li><li>place</li><li>move</li></ol><span class="done" aria-label="success">✓</span></div>
-          <div class="task" role="row"><span class="tname" role="rowheader">Block uprighting<small>real</small></span><ol class="segs" role="cell"><li>pick</li><li>move</li><li>rotate</li></ol><span class="done" aria-label="success">✓</span></div>
-          <div class="task" role="row"><span class="tname" role="rowheader">Reorient-insertion<small>real</small></span><ol class="segs" role="cell"><li>pick</li><li>rotate</li><li>insert</li></ol><span class="done" aria-label="success">✓</span></div>
-          <div class="task" role="row"><span class="tname" role="rowheader">Peg-in-hole<small>sim</small></span><ol class="segs" role="cell"><li>pick</li><li>align</li><li class="p">insert</li></ol><span class="done" aria-label="success">✓</span></div>
-          <div class="task" role="row"><span class="tname" role="rowheader">T-block push to align<small>sim</small></span><ol class="segs" role="cell"><li>pick</li><li>approach</li><li class="p">align</li></ol><span class="done" aria-label="success">✓</span></div>
-          <div class="task" role="row"><span class="tname" role="rowheader">Table-leg assembly<small>sim</small></span><ol class="segs" role="cell"><li>pick</li><li>align</li><li class="p">insert ×4</li></ol><span class="done" aria-label="success">✓</span></div>
-        </div>
-        <p class="tnote">How the framework split each of the six tasks. Most steps stay as code; only the contact-critical step is learned.</p>
-      </div>
-
-      <div class="finding">
-        <h3>1. Verify-and-repair makes code generation far more reliable</h3>
-        <p class="muted">Compared with single-pass code generation in the style of Code as Policies, iterative verification and repair reaches 100% on stacking and uprighting. A reusable code skill lifts the harder tasks further. Table-leg assembly still fails with code alone: four tight insertions give four chances to fail.</p>
-        <div class="tablebox">
-          <table>
-            <thead><tr><th>Task</th><th>Single pass (CaP-style)</th><th class="ours">Ours, no code skill</th><th class="ours">Ours, with code skill</th></tr></thead>
-            <tbody>
-              <tr><td>Three-block stacking</td><td>23</td><td class="ours"><b>100</b> <small>(1.1)</small></td><td class="ours">92 <small>(1.1)</small></td></tr>
-              <tr><td>Block uprighting</td><td>23</td><td class="ours"><b>100</b> <small>(1.5)</small></td><td class="ours"><b>100</b> <small>(1.2)</small></td></tr>
-              <tr><td>Object reorientation–insertion</td><td>0</td><td class="ours">77 <small>(3.9)</small></td><td class="ours"><b>100</b> <small>(1.0)</small></td></tr>
-              <tr><td>Peg-in-hole</td><td>31</td><td class="ours">54 <small>(3.0)</small></td><td class="ours"><b>92</b> <small>(1.5)</small></td></tr>
-              <tr><td>T-block push-to-align</td><td>0</td><td class="ours">8 <small>(3.0)</small></td><td class="ours"><b>92</b> <small>(1.0)</small></td></tr>
-              <tr><td>Table-leg assembly</td><td>0</td><td class="ours">0</td><td class="ours">–</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="tnote">Code-only program-generation success (%), 13 independent runs per task and condition. Parentheses: mean attempt of first success. The baseline is human-scored and not budget-matched.</p>
-      </div>
-
-      <div class="finding">
-        <h3>2. Learning only the contact step completes the tasks code could not</h3>
-        <p class="muted">Segment policies succeed 96.6–98.3% of the time on their own step. Plugged into full programs, they bring peg-in-hole, table-leg assembly and T-block push to 84–95% end-to-end success. Policies also transfer to other program versions of the same task with almost no loss.</p>
-        <div class="tablebox">
-          <table>
-            <thead><tr><th>Task</th><th>RL calls</th><th>RL segment</th><th>Hybrid + teleport</th><th class="ours">Hybrid + learned</th><th>Policy reuse</th></tr></thead>
-            <tbody>
-              <tr><td>Peg-in-hole</td><td>1</td><td>98.3</td><td>100</td><td class="ours"><b>94.8</b></td><td>94.9</td></tr>
-              <tr><td>Table-leg assembly</td><td>4</td><td>96.6</td><td>100</td><td class="ours"><b>93.7</b></td><td>94.9</td></tr>
-              <tr><td>T-block push-to-align</td><td>1</td><td>97.8</td><td>100</td><td class="ours"><b>84.2</b></td><td>82.3</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="tnote">Success (%) in simulation, 256 environments per evaluation. Reuse averages 20 pairings of a policy with programs it was not trained with.</p>
-      </div>
-
-      <div class="finding">
-        <h3>3. The steps chosen for learning really do need it</h3>
-        <p class="muted">Under perturbation, the segments assigned to RL are exactly where code falls apart, while geometric code segments stay reliable.</p>
-        <div class="pert">
-          <div><h4>Peg insertion, 3 mm pose error</h4>
-            <div class="bar2"><span class="lab">code</span><span class="track"><span class="fill c" style="display:block;width:26%"></span></span><span class="v">26%</span></div>
-            <div class="bar2"><span class="lab">policy</span><span class="track"><span class="fill p" style="display:block;width:70%"></span></span><span class="v">70%</span></div></div>
-          <div><h4>T-block push, 3 mm pose error</h4>
-            <div class="bar2"><span class="lab">code</span><span class="track"><span class="fill c" style="display:block;width:65%"></span></span><span class="v">65%</span></div>
-            <div class="bar2"><span class="lab">policy</span><span class="track"><span class="fill p" style="display:block;width:92%"></span></span><span class="v">92%</span></div></div>
-          <div><h4>T-block push, 50% friction noise</h4>
-            <div class="bar2"><span class="lab">code</span><span class="track"><span class="fill c" style="display:block;width:29%"></span></span><span class="v">29%</span></div>
-            <div class="bar2"><span class="lab">policy</span><span class="track"><span class="fill p" style="display:block;width:81%"></span></span><span class="v">81%</span></div></div>
-        </div>
-        <p class="tnote">Segment success over 100 rollouts per condition.</p>
-      </div>
-
-      <figure class="fig finding">
-        <div class="frame"><img src="../assets/when-to-code-results.jpg" width="1600" height="758" loading="lazy" alt="Execution results on six tasks. Real robot: 3-block stacking, block uprighting, reorient-insertion. Simulation: peg-in-hole, T-block push to align, table-leg assembly. Each step is outlined green for code or purple for a learned policy."></div>
-        <figcaption><b>End-to-end executions.</b> Left: code-only programs verified in simulation and run unchanged on a real six-axis robot. Right: hybrid programs in simulation. Green steps run as code, purple as learned policies.</figcaption>
-      </figure>
-
-      <div class="limits"><b>Limits.</b> Hybrid programs are evaluated in simulation; the physical experiments run code-only programs. Real-to-sim accuracy is measured on object dimensions only, and the framework currently assumes rigid objects.</div>
-    </section>
-
-    <section id="outputs">
-      <p class="part">Outputs</p>
-      <h2>Figures, publications and keywords</h2>
-      <div class="outs">
-        <div>
-          <h3>Publications &amp; presentations</h3>
-          <ul class="plist">
-            <li><b>When to Code, When to Learn: Real-to-Sim-Verified Hybrid Code–Policy Skill Generation for Long-Horizon Robot Manipulation</b>
-              <span class="s"><b style="color:var(--ink)">Sumin Lee</b>, Jiwoo Kim, Joo Yong Sim† · submitted to IEEE Robotics and Automation Letters (RA-L), under review</span></li>
-            <li><b>Sim-to-Real Skill Generation for Long-Horizon and Contact-Rich Tasks</b>
-              <span class="s">KSME Bioengineering Division Spring Conference 2026, poster (earlier version of this work)</span></li>
-          </ul>
-        </div>
-        <div>
-          <h3>Related keywords</h3>
-          <ul class="kwl">
-            <li class="main">Robot Manipulation</li>
-            <li class="main">LLMs for Robotics</li>
-            <li class="main">Robot Learning</li>
-            <li class="main">Sim-to-Real Transfer</li>
-            <li class="main">Robot Perception</li>
-            <li>Hybrid code–policy programs</li>
-            <li>Code generation</li>
-            <li>Reinforcement learning</li>
-            <li>Real-to-sim alignment</li>
-            <li>Long-horizon manipulation</li>
-            <li>Contact-rich manipulation</li>
-          </ul>
-        </div>
-      </div>
-
-      <h3 style="font-family:var(--f-mono);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:2.2rem 0 0.8rem">Figures</h3>
-      <div class="gallery">
-        <a href="../assets/when-to-code.jpg" target="_blank" rel="noopener"><div class="th"><img src="../assets/when-to-code.jpg" alt="" loading="lazy"></div><span>Framework overview ↗</span></a>
-        <a href="img/code-vs-hybrid.jpg" target="_blank" rel="noopener"><div class="th"><img src="img/code-vs-hybrid.jpg" alt="" loading="lazy"></div><span>Code only vs. hybrid ↗</span></a>
-        <a href="img/real-to-sim.jpg" target="_blank" rel="noopener"><div class="th"><img src="img/real-to-sim.jpg" alt="" loading="lazy"></div><span>Real-to-sim alignment ↗</span></a>
-        <a href="img/hybrid-integration.jpg" target="_blank" rel="noopener"><div class="th"><img src="img/hybrid-integration.jpg" alt="" loading="lazy"></div><span>Hybrid integration ↗</span></a>
-        <a href="../assets/when-to-code-results.jpg" target="_blank" rel="noopener"><div class="th"><img src="../assets/when-to-code-results.jpg" alt="" loading="lazy"></div><span>Six-task executions ↗</span></a>
-      </div>
-    </section>
+<section id="abstract">
+  <div class="wrap narrow">
+    <h2>Abstract</h2>
+    <p class="abstract">Multi-stage robot manipulation requires both executable task composition and adaptive control of contact-rich interactions. Large language models can generate robot programs from language, but their code can be brittle during physical interaction. Reinforcement learning provides adaptive control but is inefficient when applied to an entire multi-stage task. We propose a real-to-sim-verified framework that converts a scene and a language instruction into a hybrid code–policy program. Segments that can be specified from scene geometry and executed with deterministic robot-API calls are assigned to code, whereas segments sensitive to contact dynamics or execution uncertainty are assigned to learned policies. Within a scene-aligned simulator, the Teleport Synthesizer uses simulator teleportation to bridge unresolved policy segments. This enables hybrid-program evaluation before policy training while extracting the handoff states and target states used to construct local observation and reward specifications. In our experiments, LLM-based code-only program generation without a reusable code skill achieved 0% and 8% program-generation success on table-leg assembly and T-block push-to-align, respectively, whereas learned hybrid programs achieved 93.7% and 84.2% end-to-end execution success in separate evaluations.</p>
   </div>
-</div>
+</section>
+
+<section id="problem" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">Problem &amp; Why</p>
+    <h2>Code is reliable until contact.<br>Learning is robust but expensive.</h2>
+    <div class="question"><small>Research question</small>In a multi-stage manipulation task, which steps should a robot <span class="c">write as code</span>, and which should it <span class="p">learn</span>?</div>
+
+    <div class="narrow prose">
+      <p>Large language models can turn a sentence like "assemble the table legs into the tabletop" into robot code. That code works well for steps that geometry fully describes, such as grasping or moving above a hole. It breaks at steps that depend on precise contact, like a tight insertion, where a few millimeters of error decide success.</p>
+      <p>Reinforcement learning handles contact well, but learning a whole multi-stage task is slow and needs a task-specific observation and reward design every time. Neither tool alone fits a task that mixes both kinds of step.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card"><b class="c">Code only</b><p>Fast and interpretable, but brittle at contact. Code-only generation never completed table-leg assembly.</p></div>
+      <div class="card"><b class="p">Learning only</b><p>Adapts to contact, but training the full task is inefficient and needs hand-designed rewards per task.</p></div>
+      <div class="card hy"><b>Hybrid, per segment</b><p>Keep the geometric steps as code and learn only the contact-critical ones, inside one executable program.</p></div>
+    </div>
+
+    <figure class="fig">
+      <div class="frame"><img src="img/code-vs-hybrid.jpg" width="1600" height="746" loading="lazy" alt="Table-leg assembly in simulation. Top row, code only: the legs fall over and the task fails. Bottom row, hybrid code plus RL policy: all four legs are inserted and the task succeeds."></div>
+      <figcaption><b>Why it matters.</b> Table-leg assembly with code alone fails at insertion (top). Replacing only the insertion step with a learned policy completes the task (bottom).</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <p class="eyebrow">Methods &amp; Findings</p>
+    <h2>How the framework builds a hybrid program</h2>
+    <figure class="fig">
+      <div class="frame"><img src="../assets/when-to-code.jpg" width="1600" height="728" loading="lazy" alt="Framework overview: real-to-sim scene alignment, LLM agents that plan code and RL segments, teleport proxy execution, segment-level policy training, and hybrid execution."></div>
+      <figcaption><b>Framework overview.</b> From a language command and calibrated multi-view RGB-D views, LLM agents build a hybrid program, verify it in a scene-aligned simulator, and train policies only where they are needed.</figcaption>
+    </figure>
+
+    <ol class="steps narrow">
+      <li><div class="body">
+        <h3>Align the real scene in simulation</h3>
+        <p>Four calibrated RGB-D cameras observe the workspace. Each object is segmented (SAM 2), turned into a 3-D mesh (SAM 3D), rescaled to its measured size, and posed in the robot base frame (FoundationPose). The result is a simulator that matches the real scene object by object, within <b>1.30 mm</b> on average.</p>
+      </div></li>
+      <li><div class="body">
+        <h3>Plan the task as <span class="tok c">[CODE]</span> and <span class="tok p">[RL]</span> segments</h3>
+        <p>A target-scene generator turns the command into a goal state. The LLM planner splits the task into ordered segments and labels each one: code if the robot API can do it and it tolerates pose error, RL if it is sensitive to contact or uncertain dynamics. The code generator writes Python robot-API calls and leaves a named placeholder for every RL call.</p>
+      </div></li>
+      <li><div class="body">
+        <h3>Verify and repair the program before training anything</h3>
+        <div class="two">
+          <div>
+            <p>Policies don't exist yet, so a <b>Teleport Synthesizer</b> stands in for each RL call: it teleports the objects to that segment's target state so the rest of the program can run. The verifier checks for runtime errors, collisions and goal satisfaction. When a rollout fails, an analyzer reads the logs and the code is revised; if a code step keeps failing at contact, the planner reassigns just that step from <span class="tok c">[CODE]</span> to <span class="tok p">[RL]</span>.</p>
+            <p>The same rollout records each RL segment's start state <span class="tok">S<sub>pre</sub></span> and goal <span class="tok">S<sub>post</sub></span>, which become its local learning problem.</p>
+          </div>
+          <figure class="fig" style="margin:0"><div class="frame"><img src="img/hybrid-integration.jpg" width="900" height="1274" loading="lazy" alt="Hybrid code-policy integration: planning into segments, a first rollout with a teleport proxy that extracts start and goal states, segment-level policy training, and a final rollout with the learned policy."></div></figure>
+        </div>
+      </div></li>
+      <li><div class="body">
+        <h3>Learn only the RL segments, then plug them back in</h3>
+        <p>An RL-Designer builds the observation space and generates reward code (Eureka-style), trains each segment with PPO in Isaac Lab, and revises the design from training feedback. The trained policy replaces the teleport proxy at the same call site. Verified code is saved as a reusable skill, and policy checkpoints can be reused by other programs for the same task.</p>
+      </div></li>
+    </ol>
+
+    <figure class="fig">
+      <div class="frame"><img src="img/real-to-sim.jpg" width="1600" height="930" loading="lazy" alt="Real-to-sim object alignment pipeline: multi-camera calibration, multi-view RGB-D fusion and segmentation, metric scale correction of generated meshes, 6-DoF pose estimation, and instantiation in simulation."></div>
+      <figcaption><b>Object-centric real-to-sim alignment</b> (step 1). Across ten objects the aligned assets are within 1.30 mm mean absolute error.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="findings" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">Methods &amp; Findings</p>
+    <h2>What we found</h2>
+
+    <div class="stats">
+      <div class="stat"><b>90.9%</b><span>end-to-end success over 15 hybrid program–policy pairings</span></div>
+      <div class="stat"><b>93.7%</b><span>table-leg assembly, where code-only generation reached 0%</span></div>
+      <div class="stat"><b>8 → 92%</b><span>T-block push program generation with a reusable code skill</span></div>
+      <div class="stat"><b>1.30 mm</b><span>real-to-sim object alignment error, ten objects</span></div>
+    </div>
+
+    <p class="legend"><span class="lc">code</span><span class="lp">learned policy</span></p>
+    <div class="prog" role="table" aria-label="Step-by-step programs for six tasks">
+      <div class="task" role="row"><span class="tname" role="rowheader">3-block stacking<small>real</small></span><ol class="segs" role="cell"><li>pick</li><li>place</li><li>move</li></ol><span class="done" aria-label="success">✓</span></div>
+      <div class="task" role="row"><span class="tname" role="rowheader">Block uprighting<small>real</small></span><ol class="segs" role="cell"><li>pick</li><li>move</li><li>rotate</li></ol><span class="done" aria-label="success">✓</span></div>
+      <div class="task" role="row"><span class="tname" role="rowheader">Reorient-insertion<small>real</small></span><ol class="segs" role="cell"><li>pick</li><li>rotate</li><li>insert</li></ol><span class="done" aria-label="success">✓</span></div>
+      <div class="task" role="row"><span class="tname" role="rowheader">Peg-in-hole<small>sim</small></span><ol class="segs" role="cell"><li>pick</li><li>align</li><li class="p">insert</li></ol><span class="done" aria-label="success">✓</span></div>
+      <div class="task" role="row"><span class="tname" role="rowheader">T-block push to align<small>sim</small></span><ol class="segs" role="cell"><li>pick</li><li>approach</li><li class="p">align</li></ol><span class="done" aria-label="success">✓</span></div>
+      <div class="task" role="row"><span class="tname" role="rowheader">Table-leg assembly<small>sim</small></span><ol class="segs" role="cell"><li>pick</li><li>align</li><li class="p">insert ×4</li></ol><span class="done" aria-label="success">✓</span></div>
+    </div>
+    <p class="note">How the framework split each of the six tasks. Most steps stay as code; only the contact-critical step is learned.</p>
+
+    <div class="finding narrow">
+      <h3>1. Verify-and-repair makes code generation far more reliable</h3>
+      <p>Compared with single-pass generation in the style of Code as Policies, iterative verification and repair reaches 100% on stacking and uprighting. A reusable code skill lifts the harder tasks further. Table-leg assembly still fails with code alone: four tight insertions give four chances to fail.</p>
+    </div>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Task</th><th>Single pass (CaP-style)</th><th class="ours">Ours, no code skill</th><th class="ours">Ours, with code skill</th></tr></thead>
+        <tbody>
+          <tr><td>Three-block stacking</td><td>23</td><td class="ours"><b>100</b> <small>(1.1)</small></td><td class="ours">92 <small>(1.1)</small></td></tr>
+          <tr><td>Block uprighting</td><td>23</td><td class="ours"><b>100</b> <small>(1.5)</small></td><td class="ours"><b>100</b> <small>(1.2)</small></td></tr>
+          <tr><td>Object reorientation–insertion</td><td>0</td><td class="ours">77 <small>(3.9)</small></td><td class="ours"><b>100</b> <small>(1.0)</small></td></tr>
+          <tr><td>Peg-in-hole</td><td>31</td><td class="ours">54 <small>(3.0)</small></td><td class="ours"><b>92</b> <small>(1.5)</small></td></tr>
+          <tr><td>T-block push-to-align</td><td>0</td><td class="ours">8 <small>(3.0)</small></td><td class="ours"><b>92</b> <small>(1.0)</small></td></tr>
+          <tr><td>Table-leg assembly</td><td>0</td><td class="ours">0</td><td class="ours">–</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Code-only program-generation success (%), 13 independent runs per task and condition. Parentheses: mean attempt of first success. The baseline is human-scored and not budget-matched.</p>
+
+    <div class="finding narrow">
+      <h3>2. Learning only the contact step completes the tasks code could not</h3>
+      <p>Segment policies succeed 96.6–98.3% of the time on their own step. Plugged into full programs, they bring peg-in-hole, table-leg assembly and T-block push to 84–95% end-to-end success, and transfer to other program versions of the same task with almost no loss.</p>
+    </div>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Task</th><th>RL calls</th><th>RL segment</th><th>Hybrid + teleport</th><th class="ours">Hybrid + learned</th><th>Policy reuse</th></tr></thead>
+        <tbody>
+          <tr><td>Peg-in-hole</td><td>1</td><td>98.3</td><td>100</td><td class="ours"><b>94.8</b></td><td>94.9</td></tr>
+          <tr><td>Table-leg assembly</td><td>4</td><td>96.6</td><td>100</td><td class="ours"><b>93.7</b></td><td>94.9</td></tr>
+          <tr><td>T-block push-to-align</td><td>1</td><td>97.8</td><td>100</td><td class="ours"><b>84.2</b></td><td>82.3</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Success (%) in simulation, 256 environments per evaluation. Reuse averages 20 pairings of a policy with programs it was not trained with.</p>
+
+    <div class="finding narrow">
+      <h3>3. The steps chosen for learning really do need it</h3>
+      <p>Under perturbation, the segments assigned to RL are exactly where code falls apart, while geometric code segments stay reliable.</p>
+    </div>
+    <div class="pert">
+      <div><h4>Peg insertion, 3 mm pose error</h4>
+        <div class="bar2"><span class="lab">code</span><span class="track"><span class="fill c" style="width:26%"></span></span><span class="v">26%</span></div>
+        <div class="bar2"><span class="lab">policy</span><span class="track"><span class="fill p" style="width:70%"></span></span><span class="v">70%</span></div></div>
+      <div><h4>T-block push, 3 mm pose error</h4>
+        <div class="bar2"><span class="lab">code</span><span class="track"><span class="fill c" style="width:65%"></span></span><span class="v">65%</span></div>
+        <div class="bar2"><span class="lab">policy</span><span class="track"><span class="fill p" style="width:92%"></span></span><span class="v">92%</span></div></div>
+      <div><h4>T-block push, 50% friction noise</h4>
+        <div class="bar2"><span class="lab">code</span><span class="track"><span class="fill c" style="width:29%"></span></span><span class="v">29%</span></div>
+        <div class="bar2"><span class="lab">policy</span><span class="track"><span class="fill p" style="width:81%"></span></span><span class="v">81%</span></div></div>
+    </div>
+    <p class="note">Segment success over 100 rollouts per condition.</p>
+
+    <div class="limits"><b>Limits.</b> Hybrid programs are evaluated in simulation; the physical experiments run code-only programs on a six-axis robot. Real-to-sim accuracy is measured on object dimensions only, and the framework currently assumes rigid objects.</div>
+  </div>
+</section>
+
+<section id="outputs">
+  <div class="wrap">
+    <p class="eyebrow">Outputs</p>
+    <h2>Figures, publications and keywords</h2>
+    <div class="outs">
+      <div>
+        <p class="label">Publications &amp; presentations</p>
+        <ul class="plist">
+          <li><b>When to Code, When to Learn: Real-to-Sim-Verified Hybrid Code–Policy Skill Generation for Long-Horizon Robot Manipulation</b>
+            <span class="s"><b style="color:var(--ink)">Sumin Lee</b>, Jiwoo Kim, Joo Yong Sim† · submitted to IEEE Robotics and Automation Letters (RA-L), under review</span></li>
+          <li><b>Sim-to-Real Skill Generation for Long-Horizon and Contact-Rich Tasks</b>
+            <span class="s">KSME Bioengineering Division Spring Conference 2026, poster (earlier version of this work)</span></li>
+        </ul>
+      </div>
+      <div>
+        <p class="label">Related keywords</p>
+        <ul class="kwl">
+          <li class="main">Robot Manipulation</li>
+          <li class="main">LLMs for Robotics</li>
+          <li class="main">Robot Learning</li>
+          <li class="main">Sim-to-Real Transfer</li>
+          <li class="main">Robot Perception</li>
+          <li>Hybrid code–policy programs</li>
+          <li>Code generation</li>
+          <li>Reinforcement learning</li>
+          <li>Real-to-sim alignment</li>
+          <li>Long-horizon manipulation</li>
+          <li>Contact-rich manipulation</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="label" style="margin-top:2.5rem">Figures</p>
+    <div class="gallery">
+      <a href="../assets/when-to-code.jpg" target="_blank" rel="noopener"><div class="th"><img src="../assets/when-to-code.jpg" alt="" loading="lazy"></div><span>Framework overview ↗</span></a>
+      <a href="img/code-vs-hybrid.jpg" target="_blank" rel="noopener"><div class="th"><img src="img/code-vs-hybrid.jpg" alt="" loading="lazy"></div><span>Code only vs. hybrid ↗</span></a>
+      <a href="img/real-to-sim.jpg" target="_blank" rel="noopener"><div class="th"><img src="img/real-to-sim.jpg" alt="" loading="lazy"></div><span>Real-to-sim alignment ↗</span></a>
+      <a href="img/hybrid-integration.jpg" target="_blank" rel="noopener"><div class="th"><img src="img/hybrid-integration.jpg" alt="" loading="lazy"></div><span>Hybrid integration ↗</span></a>
+      <a href="../assets/when-to-code-results.jpg" target="_blank" rel="noopener"><div class="th"><img src="../assets/when-to-code-results.jpg" alt="" loading="lazy"></div><span>Six-task executions ↗</span></a>
+    </div>
+
+    <p class="label" id="bibtex" style="margin-top:2.5rem">BibTeX</p>
+    <div class="bib">
+      <button class="copy" id="copyBib" type="button" aria-label="Copy BibTeX"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h.5"/></svg><span>copy</span></button>
+<pre id="bibText">@article{lee2026whentocode,
+  title   = {When to Code, When to Learn: Real-to-Sim-Verified Hybrid
+             Code-Policy Skill Generation for Long-Horizon Robot Manipulation},
+  author  = {Lee, Sumin and Kim, Jiwoo and Sim, Joo Yong},
+  journal = {IEEE Robotics and Automation Letters},
+  note    = {Under review},
+  year    = {2026}
+}</pre>
+    </div>
+  </div>
+</section>
 
 <footer>
   <div class="wrap">
-    <span><a href="../">← Back to Sumin Lee</a></span>
-    <span>Last updated Oct 2026</span>
+    <a href="../">← Back to Sumin Lee</a>
+    <span>Autonomous Mechanical Systems Lab · Sookmyung Women's University</span>
   </div>
 </footer>
 
 <script>
   (function () {
-    var root = document.documentElement;
-    try { var s = localStorage.getItem("theme"); if (s === "light" || s === "dark") root.setAttribute("data-theme", s); } catch (e) {}
-    document.getElementById("themeBtn").addEventListener("click", function () {
-      var cur = root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
-      var next = cur === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      try { localStorage.setItem("theme", next); } catch (e) {}
+    var btn = document.getElementById("copyBib"), lab = btn.querySelector("span"), pre = document.getElementById("bibText");
+    function flash(t) { lab.textContent = t; clearTimeout(btn._t); btn._t = setTimeout(function () { lab.textContent = "copy"; }, 1600); }
+    btn.addEventListener("click", function () {
+      var text = pre.textContent;
+      function fallback() { var r = document.createRange(); r.selectNodeContents(pre); var s = getSelection(); s.removeAllRanges(); s.addRange(r); flash("press Ctrl+C"); }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { flash("copied"); }, fallback);
+      else fallback();
     });
-    var links = Array.prototype.slice.call(document.querySelectorAll(".rail a"));
-    if (!("IntersectionObserver" in window) || !links.length) return;
-    var byId = {};
-    links.forEach(function (a) { byId[a.getAttribute("href").slice(1)] = a; });
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting && byId[e.target.id]) {
-          links.forEach(function (a) { a.classList.remove("on"); });
-          byId[e.target.id].classList.add("on");
-        }
-      });
-    }, { rootMargin: "-35% 0px -60% 0px" });
-    Object.keys(byId).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
   })();
 </script>
 </body>
